@@ -1,0 +1,208 @@
+body.site-body.announcements-page {
+  background-image:
+    radial-gradient(circle at top right, rgba(34, 211, 238, 0.08), transparent 22%),
+    linear-gradient(160deg, rgba(4, 16, 24, 0.94) 0%, rgba(7, 21, 34, 0.97) 45%, rgba(15, 23, 42, 0.995) 100%),
+    url("assets/images/ehe.jpeg");
+  background-position: center, center, center;
+  background-size: auto, auto, cover;
+  background-repeat: no-repeat;
+  background-attachment: scroll, scroll, fixed;
+}
+
+body.site-body.announcements-page .site-header {
+  background: rgba(2, 6, 23, 0.52);
+}
+
+body.site-body.announcements-page .nav-link[aria-current="page"] {
+  color: var(--accent-soft);
+}
+
+.archive-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 70vh;
+}
+
+.archive-hero-media,
+.archive-hero-overlay,
+.archive-hero-glow {
+  position: absolute;
+  inset: 0;
+}
+
+.archive-hero-media {
+  background: linear-gradient(135deg, rgba(4, 16, 24, 0.58), rgba(15, 23, 42, 0.38));
+}
+
+@media (max-width: 63.9375rem) {
+  body.site-body.announcements-page {
+    background-attachment: scroll, scroll, scroll;
+  }
+}
+
+.archive-hero-overlay {
+  background:
+    linear-gradient(to bottom, rgba(2, 6, 23, 0.42), rgba(2, 6, 23, 0.88)),
+    linear-gradient(to right, rgba(2, 6, 23, 0.92), rgba(2, 6, 23, 0.62));
+}
+
+.archive-hero-glow {
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.05), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(45, 212, 191, 0.04), transparent 24%);
+}
+
+.archive-hero-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 2rem;
+  align-items: end;
+  min-height: 70vh;
+  padding-block: 7rem 4rem;
+}
+
+.archive-copy {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 42rem;
+}
+
+.archive-title {
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 900;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+}
+
+.archive-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.85;
+}
+
+.archive-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.archive-hero-panels {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.archive-stat-card,
+.archive-featured-card {
+  padding: 1.5rem;
+}
+
+.archive-stat-value {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.archive-featured-title {
+  margin: 0.75rem 0 0;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.05;
+}
+
+.archive-featured-meta {
+  margin: 1rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.875rem;
+}
+
+.archive-section {
+  position: relative;
+  padding-block: 4rem 5rem;
+}
+
+.archive-toolbar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.archive-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.archive-card {
+  padding: 1.6rem;
+  transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.archive-card:hover {
+  transform: translateY(-4px);
+  background: var(--surface-hover);
+  border-color: rgba(103, 232, 249, 0.26);
+}
+
+.archive-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.archive-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(103, 232, 249, 0.2);
+  border-radius: var(--radius-pill);
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--accent-pale);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.archive-card-title {
+  margin: 1rem 0 0;
+}
+
+.archive-card-copy {
+  margin-top: 1rem;
+}
+
+.archive-card-meta {
+  margin-top: 1rem;
+  color: var(--text-dim);
+  font-size: 0.875rem;
+}
+
+.archive-empty-card {
+  padding: 2rem;
+}
+
+@media (min-width: 48rem) {
+  .archive-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 64rem) {
+  .archive-hero-layout {
+    grid-template-columns: minmax(0, 1.08fr) minmax(22rem, 0.92fr);
+  }
+
+  .archive-toolbar {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}

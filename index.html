@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mubas Pickleball Club</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="site-body">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <header class="site-header" data-menu-open="false">
+      <div class="container header-inner">
+        <a href="#home" class="brand">
+          <div class="brand-mark">
+            <img
+              src="assets/logo/log.jpeg"
+              alt="Mubas Pickleball Club logo"
+              class="brand-logo"
+            />
+          </div>
+          <div class="brand-copy">
+            <p class="brand-kicker">Mubas Pickleball</p>
+            <p class="brand-name">Club</p>
+          </div>
+        </a>
+
+        <nav
+          id="primary-navigation"
+          class="nav-menu"
+          aria-label="Primary navigation"
+        >
+          <a href="#home" class="nav-link">Home</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#gallery" class="nav-link">Gallery</a>
+          <a href="#videos" class="nav-link">Videos</a>
+          <a href="#announcements" class="nav-link">Announcements</a>
+          <a href="#fixtures" class="nav-link">Fixtures</a>
+          <a href="#contact" class="nav-link">Contact</a>
+          <a href="admin-login.html" class="btn btn-secondary nav-button">
+            Admin Login
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Open navigation menu"
+          >
+            <span class="nav-toggle-icon" aria-hidden="true">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </span>
+          </button>
+
+          <a href="admin-login.html" class="btn btn-secondary header-button">
+            Admin Login
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero-section">
+        <img
+          class="hero-video"
+          src="assets/images/home.jpeg"
+          alt=""
+          loading="eager"
+          decoding="async"
+        />
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-highlight" aria-hidden="true"></div>
+
+        <div class="container hero-layout">
+          <div class="hero-copy">
+            <div class="pill-tag">Play. Compete. Belong.</div>
+
+            <div class="hero-copy-block">
+              <h1 class="hero-title">
+                Mubas <span class="hero-title-accent">Pickleball</span> Club
+              </h1>
+              <p class="hero-description">
+                A modern digital home for club updates, photo moments, video
+                highlights, fixtures, and the energy that defines our court
+                culture.
+              </p>
+            </div>
+
+            <div class="hero-actions">
+              <a href="#gallery" class="btn btn-primary"> Explore Gallery </a>
+              <a href="#videos" class="btn btn-secondary"> Watch Highlights </a>
+            </div>
+          </div>
+
+          <div class="hero-highlights">
+           
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="content-section">
+        <div
+          class="section-background about-background"
+          aria-hidden="true"
+        ></div>
+        <div class="section-shade section-shade-soft" aria-hidden="true"></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">About the Club</p>
+              <h2 class="section-title">
+                Built on energy, community, and progress
+              </h2>
+            </div>
+            <button class="btn btn-secondary section-button" type="button">
+              Read More
+            </button>
+          </div>
+
+          <div class="about-layout">
+            <article class="glass-card section-card">
+              <p class="section-lead">
+                Mubas Pickleball Club brings together students, staff, and
+                sports lovers around competition, fitness, friendship, and
+                growth.
+              </p>
+            </article>
+            <article class="glass-card section-card">
+              <p class="mini-kicker">What visitors see</p>
+              <ul class="feature-list">
+                <li>Latest club announcements</li>
+                <li>Featured photo moments</li>
+                <li>Video highlights and recaps</li>
+                <li>Upcoming fixtures and results</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="announcements" class="content-section">
+        <div
+          class="section-background announcements-background"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="section-shade section-shade-strong"
+          aria-hidden="true"
+        ></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Announcements</p>
+              <h2 class="section-title">Latest club updates</h2>
+              <p
+                id="announcements-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Connecting to Firebase...
+              </p>
+            </div>
+            <a href="announcements.html" class="btn btn-secondary section-button">
+              View All Announcements
+            </a>
+          </div>
+          <div
+            id="announcements-list"
+            class="content-grid announcements-grid"
+          ></div>
+        </div>
+      </section>
+
+      <section id="gallery" class="content-section">
+        <div
+          class="section-background gallery-background"
+          aria-hidden="true"
+        ></div>
+        <div class="section-shade section-shade-soft" aria-hidden="true"></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Gallery</p>
+              <h2 class="section-title">Memories from the court</h2>
+              <p
+                id="gallery-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Connecting to Firebase...
+              </p>
+            </div>
+            <a href="gallery.html" class="btn btn-secondary section-button">
+              View Full Gallery
+            </a>
+          </div>
+          <div id="gallery-grid" class="content-grid gallery-grid"></div>
+        </div>
+      </section>
+
+      <section id="videos" class="content-section">
+        <video
+          class="section-background-media videos-background-media"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="assets/videos/VID-20260312-WA0035_001.mp4" type="video/mp4" />
+        </video>
+        <div
+          class="section-shade section-shade-strong"
+          aria-hidden="true"
+        ></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Video Highlights</p>
+              <h2 class="section-title">Watch the latest action</h2>
+              <p
+                id="videos-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Connecting to Firebase...
+              </p>
+            </div>
+            <a href="videos.html" class="btn btn-secondary section-button">
+              View All Videos
+            </a>
+          </div>
+          <div id="video-list" class="content-grid video-grid"></div>
+        </div>
+      </section>
+
+      <section id="fixtures" class="content-section">
+        <div
+          class="section-background fixtures-background"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="section-shade section-shade-medium"
+          aria-hidden="true"
+        ></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Fixtures & Results</p>
+              <h2 class="section-title">Upcoming matches</h2>
+              <p
+                id="fixtures-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Connecting to Firebase...
+              </p>
+            </div>
+            <a href="fixtures.html" class="btn btn-secondary section-button">
+              View All Fixtures
+            </a>
+          </div>
+          <div id="fixtures-list" class="content-grid fixtures-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="home-gallery-lightbox" class="gallery-lightbox" hidden>
+      <div class="gallery-lightbox-backdrop" data-lightbox-close="true"></div>
+      <div
+        class="gallery-lightbox-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="home-gallery-lightbox-title"
+      >
+        <button
+          id="home-gallery-lightbox-close"
+          class="gallery-lightbox-close"
+          type="button"
+          aria-label="Close full image viewer"
+        >
+          Close
+        </button>
+
+        <div class="gallery-lightbox-layout">
+          <div class="gallery-lightbox-media">
+            <button
+              id="home-gallery-lightbox-prev"
+              class="gallery-lightbox-nav gallery-lightbox-nav-prev"
+              type="button"
+              aria-label="Show previous image"
+              hidden
+            >
+              <span aria-hidden="true">&lt;</span>
+            </button>
+            <img
+              id="home-gallery-lightbox-image"
+              class="gallery-lightbox-image"
+              alt=""
+            />
+            <button
+              id="home-gallery-lightbox-next"
+              class="gallery-lightbox-nav gallery-lightbox-nav-next"
+              type="button"
+              aria-label="Show next image"
+              hidden
+            >
+              <span aria-hidden="true">&gt;</span>
+            </button>
+          </div>
+
+          <div class="gallery-lightbox-copy">
+            <p id="home-gallery-lightbox-date" class="card-date">Gallery photo</p>
+            <h2 id="home-gallery-lightbox-title" class="gallery-lightbox-title">
+              Full image preview
+            </h2>
+            <p id="home-gallery-lightbox-caption" class="card-text">
+              Club gallery image
+            </p>
+            <p id="home-gallery-lightbox-meta" class="gallery-lightbox-meta">
+              Use the save button below to keep a copy of this image.
+            </p>
+
+            <div class="gallery-lightbox-actions">
+              <button id="home-gallery-lightbox-save" class="btn btn-primary" type="button">
+                Save Image
+              </button>
+              <button id="home-gallery-lightbox-dismiss" class="btn btn-secondary" type="button">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer id="contact" class="site-footer">
+      <div class="container footer-grid">
+        <article class="glass-card footer-card footer-brand-card">
+          <div class="footer-brand">
+            <div class="brand-mark footer-mark">
+              <img
+                src="assets/logo/log.jpeg"
+                alt="Mubas Pickleball Club logo"
+                class="brand-logo"
+              />
+            </div>
+            <div>
+              <h3 class="footer-title">Mubas Pickleball Club</h3>
+              <p class="footer-subtitle">Play. Compete. Belong.</p>
+            </div>
+          </div>
+        </article>
+
+        <div class="footer-link-grid">
+          <article class="glass-card footer-card">
+            <p class="mini-kicker">Contact</p>
+            <ul class="contact-list">
+              <li>
+                Email:
+                <a href="mailto:mubaspickleballclub@gmail.com">mubaspickleballclub@gmail.com</a>
+              </li>
+              <li>
+                Phone:
+                <a href="tel:0987323075">0987323075</a>
+                /
+                <a href="tel:0882300911">0882300911</a>
+              </li>
+              <li>Location: MUBAS Main Campus </li>
+            </ul>
+          </article>
+          <article class="glass-card footer-card">
+            <p class="mini-kicker">Follow the club</p>
+            <ul class="contact-list">
+              <li>Instagram</li>
+              <li>Facebook</li>
+              <li>YouTube</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

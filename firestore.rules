@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isClubAdmin() {
+      return request.auth != null
+        && request.auth.token.email != null
+        && request.auth.token.email == "enockkaphukusi24@gmail.com";
+    }
+
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow create, update, delete: if isClubAdmin();
+    }
+
+    match /galleryItems/{galleryItemId} {
+      allow read: if true;
+      allow create, update, delete: if isClubAdmin();
+    }
+
+    match /videoItems/{videoItemId} {
+      allow read: if true;
+      allow create, update, delete: if isClubAdmin();
+    }
+
+    match /fixtureItems/{fixtureItemId} {
+      allow read: if true;
+      allow create, update, delete: if isClubAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

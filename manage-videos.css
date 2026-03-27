@@ -1,0 +1,114 @@
+.video-frame {
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.25rem;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.video-frame-fallback {
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.68);
+  text-align: center;
+}
+
+.video-embed {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.manage-videos-page .field-grid {
+  align-items: start;
+}
+
+.video-preview-card {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.video-preview-meta {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.video-preview-player .video-frame {
+  border-radius: 1.25rem;
+}
+
+.videos-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.video-item {
+  display: grid;
+  gap: 1rem;
+}
+
+.video-item-copy {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.video-item-media .video-frame {
+  border-radius: 1.25rem;
+}
+
+.video-item-provider {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 0.42rem 0.78rem;
+  border: 1px solid rgba(103, 232, 249, 0.18);
+  border-radius: 999px;
+  background: rgba(34, 211, 238, 0.08);
+  color: var(--accent-pale);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.video-item-description {
+  margin: 0.9rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.94rem;
+  line-height: 1.7;
+}
+
+.video-item-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.video-item-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  color: var(--accent-pale);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.video-item-link:hover {
+  color: white;
+}
+
+@media (min-width: 64rem) {
+  .video-item {
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+    align-items: start;
+  }
+}

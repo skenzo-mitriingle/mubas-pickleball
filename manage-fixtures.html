@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Fixtures | Mubas Pickleball Club</title>
+  <link rel="stylesheet" href="manage-announcements.css" />
+  <link rel="stylesheet" href="manage-fixtures.css" />
+</head>
+<body class="manage-page manage-fixtures-page" data-auth-state="checking">
+  <div class="manage-atmosphere" aria-hidden="true">
+    <div class="atmosphere-orb orb-a"></div>
+    <div class="atmosphere-orb orb-b"></div>
+    <div class="atmosphere-grid"></div>
+  </div>
+
+  <main class="manage-shell">
+    <header class="topbar panel">
+      <div class="topbar-links">
+        <a href="admin-dashboard.html" class="inline-link">Back to Dashboard</a>
+        <a href="fixtures.html" class="inline-link inline-link-soft">View Public Fixtures</a>
+      </div>
+
+      <div class="brand-lockup">
+        <div class="brand-frame">
+          <img
+            src="assets/logo/log.jpeg"
+            alt="Mubas Pickleball Club logo"
+            class="brand-logo"
+          />
+        </div>
+
+        <div>
+          <p class="panel-kicker">Admin Tools</p>
+          <h1 class="page-title">Manage Fixtures</h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="session-chip">
+          <span class="session-dot" aria-hidden="true"></span>
+          <span id="admin-identity">Checking access...</span>
+        </div>
+
+        <button id="logout-button" class="logout-button" type="button">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <section class="intro-layout">
+      <article class="panel intro-panel">
+        <p class="panel-kicker">Fixture Control</p>
+        <h2 class="section-title">Create fixtures, update results, and keep the schedule organized in Firestore.</h2>
+        <p class="section-copy">
+          This page is the admin workspace for club fixtures. Add the opponent,
+          venue, match date, and mark each fixture as upcoming or completed.
+        </p>
+
+        <div class="metric-row">
+          <div class="metric-card">
+            <span class="metric-label">Fixtures</span>
+            <strong id="fixture-count">0</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Form Mode</span>
+            <strong id="form-mode-label">Create</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Sync</span>
+            <strong id="sync-label">Connecting...</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel notes-panel">
+        <p class="panel-kicker">Helpful Notes</p>
+        <h2 class="section-title">What makes a strong fixture update?</h2>
+        <ul class="note-list">
+          <li>Use the opponent name clearly so supporters can scan the schedule quickly.</li>
+          <li>Keep venue details precise in case a court or location changes before match day.</li>
+          <li>When a match finishes, switch the status to completed and add the result or recap note.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="workspace-layout fixture-workspace-layout">
+      <article class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Fixture Form</p>
+            <h2 id="form-heading" class="section-title">Create a new fixture</h2>
+          </div>
+
+          <span id="editing-chip" class="mode-chip" hidden>Editing existing item</span>
+        </div>
+
+        <form id="fixture-form" class="announcement-form" novalidate>
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label" for="fixture-opponent">Opponent</label>
+              <input
+                id="fixture-opponent"
+                class="field-input"
+                name="opponent"
+                type="text"
+                placeholder="Enter opponent name"
+                maxlength="120"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="fixture-date">Match Date</label>
+              <input
+                id="fixture-date"
+                class="field-input"
+                name="date"
+                type="date"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label" for="fixture-venue">Venue</label>
+              <input
+                id="fixture-venue"
+                class="field-input"
+                name="venue"
+                type="text"
+                placeholder="Enter venue"
+                maxlength="160"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="fixture-status">Status</label>
+              <select
+                id="fixture-status"
+                class="field-input"
+                name="status"
+                required
+              >
+                <option value="upcoming">Upcoming</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label id="fixture-details-label" class="field-label" for="fixture-details">Match Notes</label>
+            <textarea
+              id="fixture-details"
+              class="field-input field-textarea"
+              name="details"
+              placeholder="Add match notes, schedule reminders, or final result details"
+              rows="5"
+              maxlength="320"
+            ></textarea>
+            <p id="fixture-details-helper" class="helper-copy">
+              Use this field for reminders before the match or result notes after it finishes.
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button id="save-button" class="primary-button" type="submit">
+              Save fixture
+            </button>
+
+            <button id="cancel-edit-button" class="secondary-button" type="button" hidden>
+              Cancel edit
+            </button>
+          </div>
+
+          <p id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="panel list-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Saved Fixtures</p>
+            <h2 class="section-title">Existing fixtures</h2>
+          </div>
+
+          <p id="list-feedback" class="list-feedback" role="status" aria-live="polite">
+            Connecting to Firestore...
+          </p>
+        </div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          No fixtures saved yet. Add the first upcoming match using the form.
+        </div>
+
+        <div id="fixtures-list" class="announcements-list fixtures-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script type="module" src="manage-fixtures.js"></script>
+</body>
+</html>

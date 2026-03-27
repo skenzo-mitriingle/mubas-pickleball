@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Videos | Mubas Pickleball Club</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="videos.css" />
+  </head>
+  <body class="site-body videos-page">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <header class="site-header" data-menu-open="false">
+      <div class="container header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark">
+            <img
+              src="assets/logo/log.jpeg"
+              alt="Mubas Pickleball Club logo"
+              class="brand-logo"
+            />
+          </div>
+          <div class="brand-copy">
+            <p class="brand-kicker">Mubas Pickleball</p>
+            <p class="brand-name">Club</p>
+          </div>
+        </a>
+
+        <nav
+          id="primary-navigation"
+          class="nav-menu"
+          aria-label="Primary navigation"
+        >
+          <a href="index.html#home" class="nav-link">Home</a>
+          <a href="index.html#about" class="nav-link">About</a>
+          <a href="gallery.html" class="nav-link">Gallery</a>
+          <a href="videos.html" class="nav-link" aria-current="page">Videos</a>
+          <a href="announcements.html" class="nav-link">Announcements</a>
+          <a href="fixtures.html" class="nav-link">Fixtures</a>
+          <a href="index.html#contact" class="nav-link">Contact</a>
+          <a href="admin-login.html" class="btn btn-secondary nav-button">
+            Admin Login
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Open navigation menu"
+          >
+            <span class="nav-toggle-icon" aria-hidden="true">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </span>
+          </button>
+
+          <a href="admin-login.html" class="btn btn-secondary header-button">
+            Admin Login
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="videos-hero">
+        <div class="videos-hero-media" aria-hidden="true"></div>
+        <div class="videos-hero-overlay" aria-hidden="true"></div>
+        <div class="videos-hero-glow" aria-hidden="true"></div>
+
+        <div class="container videos-hero-layout">
+          <div class="videos-copy">
+            <p class="pill-tag">Video Archive</p>
+            <h1 class="videos-title">Highlights, drills, and match-day energy in motion</h1>
+            <p class="videos-description">
+              Watch the full Mubas Pickleball Club video archive with recent clips,
+              training moments, and recap content pulled directly from Firebase.
+            </p>
+
+            <div class="videos-actions">
+              <a href="index.html#videos" class="btn btn-primary">
+                Back To Homepage Preview
+              </a>
+              <a href="#videos-archive" class="btn btn-secondary">
+                Browse Full Archive
+              </a>
+            </div>
+          </div>
+
+          <div class="videos-hero-panels">
+            <article class="glass-card videos-stat-card">
+              <p class="card-kicker">Published videos</p>
+              <strong id="video-total" class="videos-stat-value">0</strong>
+              <p class="card-copy">
+                The list below loads the complete club video archive from Firebase.
+              </p>
+            </article>
+
+            <article class="glass-card videos-featured-card">
+              <div id="featured-video-player" class="videos-featured-player"></div>
+              <div class="videos-featured-copy">
+                <p id="featured-video-date" class="card-date">Connecting...</p>
+                <h2 id="featured-video-title" class="videos-featured-title">
+                  Loading the newest highlight
+                </h2>
+                <p id="featured-video-description" class="card-text">
+                  The latest club video will appear here once Firebase responds.
+                </p>
+                <p id="featured-video-meta" class="videos-featured-meta">
+                  Featured player sync in progress.
+                </p>
+                <a
+                  id="featured-video-link"
+                  class="btn btn-secondary videos-featured-link"
+                  href="#"
+                  target="_blank"
+                  rel="noreferrer"
+                  hidden
+                >
+                  Watch Source Video
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="videos-archive" class="videos-archive-section">
+        <div class="container">
+          <div class="videos-archive-toolbar">
+            <div class="section-heading">
+              <p class="section-kicker">Full Archive</p>
+              <h2 class="section-title">All club videos</h2>
+            </div>
+            <p
+              id="videos-archive-status"
+              class="section-status"
+              role="status"
+              aria-live="polite"
+            >
+              Connecting to Firebase...
+            </p>
+          </div>
+
+          <div id="videos-archive-grid" class="videos-archive-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <article class="glass-card footer-card footer-brand-card">
+          <div class="footer-brand">
+            <div class="brand-mark footer-mark">
+              <img
+                src="assets/logo/log.jpeg"
+                alt="Mubas Pickleball Club logo"
+                class="brand-logo"
+              />
+            </div>
+            <div>
+              <h3 class="footer-title">Mubas Pickleball Club</h3>
+              <p class="footer-subtitle">Full video archive</p>
+            </div>
+          </div>
+          <p class="footer-copy">
+            Keep this page bookmarked for the latest highlights, training clips,
+            and recap videos from the club.
+          </p>
+        </article>
+
+        <div class="footer-link-grid">
+          <article class="glass-card footer-card">
+            <p class="mini-kicker">Quick Links</p>
+            <ul class="contact-list">
+              <li><a href="index.html">Homepage</a></li>
+              <li><a href="gallery.html">Gallery</a></li>
+              <li><a href="announcements.html">Announcements</a></li>
+            </ul>
+          </article>
+
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="videos.js"></script>
+  </body>
+</html>

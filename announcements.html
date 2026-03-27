@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Announcements | Mubas Pickleball Club</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="announcements.css" />
+  </head>
+  <body class="site-body announcements-page">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <header class="site-header" data-menu-open="false">
+      <div class="container header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark">
+            <img
+              src="assets/logo/log.jpeg"
+              alt="Mubas Pickleball Club logo"
+              class="brand-logo"
+            />
+          </div>
+          <div class="brand-copy">
+            <p class="brand-kicker">Mubas Pickleball</p>
+            <p class="brand-name">Club</p>
+          </div>
+        </a>
+
+        <nav
+          id="primary-navigation"
+          class="nav-menu"
+          aria-label="Primary navigation"
+        >
+          <a href="index.html#home" class="nav-link">Home</a>
+          <a href="index.html#about" class="nav-link">About</a>
+          <a href="gallery.html" class="nav-link">Gallery</a>
+          <a href="videos.html" class="nav-link">Videos</a>
+          <a href="announcements.html" class="nav-link" aria-current="page">Announcements</a>
+          <a href="fixtures.html" class="nav-link">Fixtures</a>
+          <a href="index.html#contact" class="nav-link">Contact</a>
+          <a href="admin-login.html" class="btn btn-secondary nav-button">
+            Admin Login
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Open navigation menu"
+          >
+            <span class="nav-toggle-icon" aria-hidden="true">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </span>
+          </button>
+
+          <a href="admin-login.html" class="btn btn-secondary header-button">
+            Admin Login
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="archive-hero">
+        <div class="archive-hero-media" aria-hidden="true"></div>
+        <div class="archive-hero-overlay" aria-hidden="true"></div>
+        <div class="archive-hero-glow" aria-hidden="true"></div>
+
+        <div class="container archive-hero-layout">
+          <div class="archive-copy">
+            <p class="pill-tag">Announcement Archive</p>
+            <h1 class="archive-title">Every club update in one place</h1>
+            <p class="archive-description">
+              Browse the full list of training reminders, venue changes, club notices,
+              and event updates published by the Mubas Pickleball Club admin team.
+            </p>
+
+            <div class="archive-actions">
+              <a href="index.html#announcements" class="btn btn-primary">
+                Back To Homepage Preview
+              </a>
+              <a href="#announcement-archive" class="btn btn-secondary">
+                Browse Full Archive
+              </a>
+            </div>
+          </div>
+
+          <div class="archive-hero-panels">
+            <article class="glass-card archive-stat-card">
+              <p class="card-kicker">Published announcements</p>
+              <strong id="announcement-total" class="archive-stat-value">0</strong>
+              <p class="card-copy">
+                The archive below always loads the complete announcement list from Firebase.
+              </p>
+            </article>
+
+            <article class="glass-card archive-featured-card">
+              <p class="card-kicker">Latest announcement</p>
+              <p id="featured-date" class="card-date">Connecting...</p>
+              <h2 id="featured-title" class="archive-featured-title">
+                Loading the newest club update
+              </h2>
+              <p id="featured-copy" class="card-text">
+                The latest notice will appear here once Firebase responds.
+              </p>
+              <p id="featured-meta" class="archive-featured-meta">
+                Full archive sync in progress.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="announcement-archive" class="archive-section">
+        <div class="container">
+          <div class="archive-toolbar">
+            <div class="section-heading">
+              <p class="section-kicker">Full Archive</p>
+              <h2 class="section-title">All announcements</h2>
+            </div>
+            <p
+              id="archive-status"
+              class="section-status"
+              role="status"
+              aria-live="polite"
+            >
+              Connecting to Firebase...
+            </p>
+          </div>
+
+          <div id="archive-grid" class="archive-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <article class="glass-card footer-card footer-brand-card">
+          <div class="footer-brand">
+            <div class="brand-mark footer-mark">
+              <img
+                src="assets/logo/log.jpeg"
+                alt="Mubas Pickleball Club logo"
+                class="brand-logo"
+              />
+            </div>
+            <div>
+              <h3 class="footer-title">Mubas Pickleball Club</h3>
+              <p class="footer-subtitle">Full announcement archive</p>
+            </div>
+          </div>
+          <p class="footer-copy">
+            Keep this page bookmarked for the complete stream of club communication.
+          </p>
+        </article>
+
+        <div class="footer-link-grid">
+          <article class="glass-card footer-card">
+            <p class="mini-kicker">Quick Links</p>
+            <ul class="contact-list">
+              <li><a href="index.html">Homepage</a></li>
+              <li><a href="gallery.html">Gallery</a></li>
+              <li><a href="videos.html">Videos</a></li>
+            </ul>
+          </article>
+        
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="announcements.js"></script>
+  </body>
+</html>

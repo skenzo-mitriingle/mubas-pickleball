@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixtures | Mubas Pickleball Club</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="fixtures.css" />
+  </head>
+  <body class="site-body fixtures-page">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <header class="site-header" data-menu-open="false">
+      <div class="container header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark">
+            <img
+              src="assets/logo/log.jpeg"
+              alt="Mubas Pickleball Club logo"
+              class="brand-logo"
+            />
+          </div>
+          <div class="brand-copy">
+            <p class="brand-kicker">Mubas Pickleball</p>
+            <p class="brand-name">Club</p>
+          </div>
+        </a>
+
+        <nav
+          id="primary-navigation"
+          class="nav-menu"
+          aria-label="Primary navigation"
+        >
+          <a href="index.html#home" class="nav-link">Home</a>
+          <a href="index.html#about" class="nav-link">About</a>
+          <a href="gallery.html" class="nav-link">Gallery</a>
+          <a href="videos.html" class="nav-link">Videos</a>
+          <a href="announcements.html" class="nav-link">Announcements</a>
+          <a href="fixtures.html" class="nav-link" aria-current="page">Fixtures</a>
+          <a href="index.html#contact" class="nav-link">Contact</a>
+          <a href="admin-login.html" class="btn btn-secondary nav-button">
+            Admin Login
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Open navigation menu"
+          >
+            <span class="nav-toggle-icon" aria-hidden="true">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </span>
+          </button>
+
+          <a href="admin-login.html" class="btn btn-secondary header-button">
+            Admin Login
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="fixtures-hero">
+        <div class="fixtures-hero-media" aria-hidden="true"></div>
+        <div class="fixtures-hero-overlay" aria-hidden="true"></div>
+        <div class="fixtures-hero-glow" aria-hidden="true"></div>
+
+        <div class="container fixtures-hero-layout">
+          <div class="fixtures-copy">
+            <p class="pill-tag">Fixture Archive</p>
+            <h1 class="fixtures-title">Every upcoming match and completed result in one place</h1>
+            <p class="fixtures-description">
+              Track the full Mubas Pickleball Club schedule, upcoming fixtures,
+              and completed match updates pulled directly from Firebase.
+            </p>
+
+            <div class="fixtures-actions">
+              <a href="index.html#fixtures" class="btn btn-primary">
+                Back To Homepage Preview
+              </a>
+              <a href="#fixtures-archive" class="btn btn-secondary">
+                Browse Full Fixtures
+              </a>
+            </div>
+          </div>
+
+          <div class="fixtures-hero-panels">
+            <article class="glass-card fixtures-stat-card">
+              <p class="card-kicker">Fixture totals</p>
+              <div class="fixture-stat-grid">
+                <div>
+                  <span class="fixture-stat-label">Total</span>
+                  <strong id="fixture-total" class="fixtures-stat-value">0</strong>
+                </div>
+                <div>
+                  <span class="fixture-stat-label">Upcoming</span>
+                  <strong id="fixture-upcoming-total" class="fixtures-stat-value fixture-stat-small">0</strong>
+                </div>
+                <div>
+                  <span class="fixture-stat-label">Completed</span>
+                  <strong id="fixture-completed-total" class="fixtures-stat-value fixture-stat-small">0</strong>
+                </div>
+              </div>
+              <p class="card-copy">
+                Upcoming matches and final results are always grouped clearly below.
+              </p>
+            </article>
+
+            <article class="glass-card fixtures-featured-card">
+              <p id="featured-fixture-kicker" class="card-kicker">Featured fixture</p>
+              <p id="featured-fixture-date" class="card-date">Connecting...</p>
+              <h2 id="featured-fixture-title" class="fixtures-featured-title">
+                Loading the next club match
+              </h2>
+              <p id="featured-fixture-venue" class="card-meta">
+                Venue information will appear here once Firebase responds.
+              </p>
+              <p id="featured-fixture-copy" class="card-text">
+                Fixture details and result notes will appear here after sync completes.
+              </p>
+              <p id="featured-fixture-meta" class="fixtures-featured-meta">
+                Fixture spotlight sync in progress.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="fixtures-archive" class="fixtures-archive-section">
+        <div class="container">
+          <div class="fixtures-archive-toolbar">
+            <div class="section-heading">
+              <p class="section-kicker">Full Archive</p>
+              <h2 class="section-title">Upcoming fixtures and completed results</h2>
+            </div>
+            <p
+              id="fixtures-archive-status"
+              class="section-status"
+              role="status"
+              aria-live="polite"
+            >
+              Connecting to Firebase...
+            </p>
+          </div>
+
+          <div class="fixture-archive-columns">
+            <section class="fixture-archive-column">
+              <div class="fixture-column-head">
+                <p class="section-kicker">Upcoming</p>
+                <h3 class="fixture-column-title">Next matches</h3>
+              </div>
+              <div id="fixtures-upcoming-grid" class="fixture-archive-grid"></div>
+            </section>
+
+            <section class="fixture-archive-column">
+              <div class="fixture-column-head">
+                <p class="section-kicker">Completed</p>
+                <h3 class="fixture-column-title">Recent results</h3>
+              </div>
+              <div id="fixtures-completed-grid" class="fixture-archive-grid"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <article class="glass-card footer-card footer-brand-card">
+          <div class="footer-brand">
+            <div class="brand-mark footer-mark">
+              <img
+                src="assets/logo/log.jpeg"
+                alt="Mubas Pickleball Club logo"
+                class="brand-logo"
+              />
+            </div>
+            <div>
+              <h3 class="footer-title">Mubas Pickleball Club</h3>
+              <p class="footer-subtitle">Full fixture archive</p>
+            </div>
+          </div>
+          <p class="footer-copy">
+            Check this page often for the latest schedule changes, upcoming match dates,
+            and completed results from the club.
+          </p>
+        </article>
+
+        <div class="footer-link-grid">
+          <article class="glass-card footer-card">
+            <p class="mini-kicker">Quick Links</p>
+            <ul class="contact-list">
+              <li><a href="index.html">Homepage</a></li>
+              <li><a href="gallery.html">Gallery</a></li>
+              <li><a href="videos.html">Videos</a></li>
+            </ul>
+          </article>
+
+       
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="fixtures.js"></script>
+  </body>
+</html>

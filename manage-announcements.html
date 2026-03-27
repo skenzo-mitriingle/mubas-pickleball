@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Announcements | Mubas Pickleball Club</title>
+  <link rel="stylesheet" href="manage-announcements.css" />
+</head>
+<body class="manage-page" data-auth-state="checking">
+  <div class="manage-atmosphere" aria-hidden="true">
+    <div class="atmosphere-orb orb-a"></div>
+    <div class="atmosphere-orb orb-b"></div>
+    <div class="atmosphere-grid"></div>
+  </div>
+
+  <main class="manage-shell">
+    <header class="topbar panel">
+      <div class="topbar-links">
+        <a href="admin-dashboard.html" class="inline-link">Back to Dashboard</a>
+        <a href="index.html" class="inline-link inline-link-soft">View Website</a>
+      </div>
+
+      <div class="brand-lockup">
+        <div class="brand-frame">
+          <img
+            src="assets/logo/log.jpeg"
+            alt="Mubas Pickleball Club logo"
+            class="brand-logo"
+          />
+        </div>
+
+        <div>
+          <p class="panel-kicker">Admin Tools</p>
+          <h1 class="page-title">Manage Announcements</h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="session-chip">
+          <span class="session-dot" aria-hidden="true"></span>
+          <span id="admin-identity">Checking access...</span>
+        </div>
+
+        <button id="logout-button" class="logout-button" type="button">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <section class="intro-layout">
+      <article class="panel intro-panel">
+        <p class="panel-kicker">Announcements Control</p>
+        <h2 class="section-title">Create updates, save them to Firestore, and manage the existing list.</h2>
+        <p class="section-copy">
+          This page is the admin workspace for club notices. You can publish a new announcement, review what is already saved, and use the built-in actions to update or remove entries.
+        </p>
+
+        <div class="metric-row">
+          <div class="metric-card">
+            <span class="metric-label">Announcements</span>
+            <strong id="announcement-count">0</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Form Mode</span>
+            <strong id="form-mode-label">Create</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Sync</span>
+            <strong id="sync-label">Connecting...</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel notes-panel">
+        <p class="panel-kicker">Helpful Notes</p>
+        <h2 class="section-title">What makes a good announcement?</h2>
+        <ul class="note-list">
+          <li>Lead with the most important update so readers understand it quickly.</li>
+          <li>Use a clear date and keep the message short enough to scan easily.</li>
+          <li>Save edits directly from this page if a venue, deadline, or message changes.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="workspace-layout">
+      <article class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Announcement Form</p>
+            <h2 id="form-heading" class="section-title">Create a new announcement</h2>
+          </div>
+
+          <span id="editing-chip" class="mode-chip" hidden>Editing existing item</span>
+        </div>
+
+        <form id="announcement-form" class="announcement-form" novalidate>
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label" for="announcement-title">Title</label>
+              <input
+                id="announcement-title"
+                class="field-input"
+                name="title"
+                type="text"
+                placeholder="Enter announcement title"
+                maxlength="120"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="announcement-date">Announcement Date</label>
+              <input
+                id="announcement-date"
+                class="field-input"
+                name="date"
+                type="date"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="announcement-excerpt">Message</label>
+            <textarea
+              id="announcement-excerpt"
+              class="field-input field-textarea"
+              name="excerpt"
+              placeholder="Write the announcement details here"
+              rows="6"
+              maxlength="500"
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button id="save-button" class="primary-button" type="submit">
+              Save announcement
+            </button>
+
+            <button id="cancel-edit-button" class="secondary-button" type="button" hidden>
+              Cancel edit
+            </button>
+          </div>
+
+          <p id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="panel list-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Saved Announcements</p>
+            <h2 class="section-title">Existing announcements</h2>
+          </div>
+
+          <p id="list-feedback" class="list-feedback" role="status" aria-live="polite">
+            Connecting to Firestore...
+          </p>
+        </div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          No announcements saved yet. Create your first one using the form.
+        </div>
+
+        <div id="announcements-list" class="announcements-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script type="module" src="manage-announcements.js"></script>
+</body>
+</html>

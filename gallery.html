@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery | Mubas Pickleball Club</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="gallery.css" />
+  </head>
+  <body class="site-body gallery-page">
+    <div class="page-glow" aria-hidden="true"></div>
+
+    <header class="site-header" data-menu-open="false">
+      <div class="container header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-mark">
+            <img
+              src="assets/logo/log.jpeg"
+              alt="Mubas Pickleball Club logo"
+              class="brand-logo"
+            />
+          </div>
+          <div class="brand-copy">
+            <p class="brand-kicker">Mubas Pickleball</p>
+            <p class="brand-name">Club</p>
+          </div>
+        </a>
+
+        <nav
+          id="primary-navigation"
+          class="nav-menu"
+          aria-label="Primary navigation"
+        >
+          <a href="index.html#home" class="nav-link">Home</a>
+          <a href="index.html#about" class="nav-link">About</a>
+          <a href="gallery.html" class="nav-link" aria-current="page">Gallery</a>
+          <a href="announcements.html" class="nav-link">Announcements</a>
+          <a href="videos.html" class="nav-link">Videos</a>
+          <a href="fixtures.html" class="nav-link">Fixtures</a>
+          <a href="index.html#contact" class="nav-link">Contact</a>
+          <a href="admin-login.html" class="btn btn-secondary nav-button">
+            Admin Login
+          </a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="primary-navigation"
+            aria-label="Open navigation menu"
+          >
+            <span class="nav-toggle-icon" aria-hidden="true">
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+              <span class="nav-toggle-bar"></span>
+            </span>
+          </button>
+
+          <a href="admin-login.html" class="btn btn-secondary header-button">
+            Admin Login
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="gallery-hero">
+        <div class="gallery-hero-media" aria-hidden="true"></div>
+        <div class="gallery-hero-overlay" aria-hidden="true"></div>
+        <div class="gallery-hero-glow" aria-hidden="true"></div>
+
+        <div class="container gallery-hero-layout">
+          <div class="gallery-copy">
+            <p class="pill-tag">Photo Archive</p>
+            <h1 class="gallery-title">Every rally, smile, and match-day memory</h1>
+            <p class="gallery-description">
+              Explore the full Mubas Pickleball Club gallery with images uploaded
+              through Firebase Storage and organized in Firestore for easy updates.
+            </p>
+
+            <div class="gallery-actions">
+              <a href="index.html#gallery" class="btn btn-primary">
+                Back To Homepage Preview
+              </a>
+              <a href="#gallery-archive" class="btn btn-secondary">
+                Browse Full Gallery
+              </a>
+            </div>
+          </div>
+
+          <div class="gallery-hero-panels">
+            <article class="glass-card gallery-stat-card">
+              <p class="card-kicker">Published photos</p>
+              <strong id="gallery-total" class="gallery-stat-value">0</strong>
+              <p class="card-copy">
+                Every image below is loaded from Firebase so the archive stays current.
+              </p>
+            </article>
+
+            <article class="glass-card gallery-featured-card">
+              <div class="gallery-featured-media">
+                <button
+                  id="featured-gallery-trigger"
+                  class="gallery-featured-trigger"
+                  type="button"
+                  disabled
+                  aria-label="Open featured gallery image"
+                >
+                  <img
+                    id="featured-gallery-image"
+                    class="gallery-featured-image"
+                    alt=""
+                    hidden
+                  />
+                  <span id="featured-gallery-empty" class="gallery-featured-empty">
+                    Featured image loading...
+                  </span>
+                  <span class="gallery-card-overlay" aria-hidden="true">
+                    <span class="gallery-card-overlay-label">View full image</span>
+                  </span>
+                </button>
+              </div>
+
+              <div class="gallery-featured-copy">
+                <p id="featured-gallery-date" class="card-date">Connecting...</p>
+                <h2 id="featured-gallery-title" class="gallery-featured-title">
+                  Loading the newest photo
+                </h2>
+                <p id="featured-gallery-caption" class="card-text">
+                  The latest gallery image will appear here once Firebase responds.
+                </p>
+                <p id="featured-gallery-meta" class="gallery-featured-meta">
+                  Full gallery sync in progress.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="gallery-archive" class="gallery-archive-section">
+        <div class="container">
+          <div class="gallery-archive-toolbar">
+            <div class="section-heading">
+              <p class="section-kicker">Full Gallery</p>
+              <h2 class="section-title">All uploaded photos</h2>
+            </div>
+            <p
+              id="gallery-archive-status"
+              class="section-status"
+              role="status"
+              aria-live="polite"
+            >
+              Connecting to Firebase...
+            </p>
+          </div>
+
+          <div id="gallery-archive-grid" class="gallery-archive-grid"></div>
+        </div>
+      </section>
+    </main>
+
+    <div id="gallery-lightbox" class="gallery-lightbox" hidden>
+      <div class="gallery-lightbox-backdrop" data-lightbox-close="true"></div>
+      <div
+        class="gallery-lightbox-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gallery-lightbox-title"
+      >
+        <button
+          id="gallery-lightbox-close"
+          class="gallery-lightbox-close"
+          type="button"
+          aria-label="Close full image viewer"
+        >
+          Close
+        </button>
+
+        <div class="gallery-lightbox-layout">
+          <div class="gallery-lightbox-media">
+            <button
+              id="gallery-lightbox-prev"
+              class="gallery-lightbox-nav gallery-lightbox-nav-prev"
+              type="button"
+              aria-label="Show previous image"
+              hidden
+            >
+              <span aria-hidden="true">&lt;</span>
+            </button>
+            <img
+              id="gallery-lightbox-image"
+              class="gallery-lightbox-image"
+              alt=""
+            />
+            <button
+              id="gallery-lightbox-next"
+              class="gallery-lightbox-nav gallery-lightbox-nav-next"
+              type="button"
+              aria-label="Show next image"
+              hidden
+            >
+              <span aria-hidden="true">&gt;</span>
+            </button>
+          </div>
+
+          <div class="gallery-lightbox-copy">
+            <p id="gallery-lightbox-date" class="card-date">Gallery photo</p>
+            <h2 id="gallery-lightbox-title" class="gallery-lightbox-title">
+              Full image preview
+            </h2>
+            <p id="gallery-lightbox-caption" class="card-text">
+              Club gallery image
+            </p>
+            <p id="gallery-lightbox-meta" class="gallery-lightbox-meta">
+              Use the save button below to keep a copy of this image.
+            </p>
+
+            <div class="gallery-lightbox-actions">
+              <button id="gallery-lightbox-save" class="btn btn-primary" type="button">
+                Save Image
+              </button>
+              <button id="gallery-lightbox-dismiss" class="btn btn-secondary" type="button">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <article class="glass-card footer-card footer-brand-card">
+          <div class="footer-brand">
+            <div class="brand-mark footer-mark">
+              <img
+                src="assets/logo/log.jpeg"
+                alt="Mubas Pickleball Club logo"
+                class="brand-logo"
+              />
+            </div>
+            <div>
+              <h3 class="footer-title">Mubas Pickleball Club</h3>
+              <p class="footer-subtitle">Firebase-powered gallery archive</p>
+            </div>
+          </div>
+          <p class="footer-copy">
+            Keep this page bookmarked for the latest club photos, training energy,
+            tournaments, and community moments.
+          </p>
+        </article>
+
+        <div class="footer-link-grid">
+          <article class="glass-card footer-card">
+            <p class="mini-kicker">Quick Links</p>
+            <ul class="contact-list">
+              <li><a href="index.html">Homepage</a></li>
+              <li><a href="announcements.html">Announcements</a></li>
+              <li><a href="videos.html">Videos</a></li>
+            </ul>
+          </article>
+  
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="gallery.js"></script>
+  </body>
+</html>

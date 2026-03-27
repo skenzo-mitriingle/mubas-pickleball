@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Videos | Mubas Pickleball Club</title>
+  <link rel="stylesheet" href="manage-announcements.css" />
+  <link rel="stylesheet" href="manage-videos.css" />
+</head>
+<body class="manage-page manage-videos-page" data-auth-state="checking">
+  <div class="manage-atmosphere" aria-hidden="true">
+    <div class="atmosphere-orb orb-a"></div>
+    <div class="atmosphere-orb orb-b"></div>
+    <div class="atmosphere-grid"></div>
+  </div>
+
+  <main class="manage-shell">
+    <header class="topbar panel">
+      <div class="topbar-links">
+        <a href="admin-dashboard.html" class="inline-link">Back to Dashboard</a>
+        <a href="videos.html" class="inline-link inline-link-soft">View Public Videos</a>
+      </div>
+
+      <div class="brand-lockup">
+        <div class="brand-frame">
+          <img
+            src="assets/logo/log.jpeg"
+            alt="Mubas Pickleball Club logo"
+            class="brand-logo"
+          />
+        </div>
+
+        <div>
+          <p class="panel-kicker">Admin Tools</p>
+          <h1 class="page-title">Manage Videos</h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="session-chip">
+          <span class="session-dot" aria-hidden="true"></span>
+          <span id="admin-identity">Checking access...</span>
+        </div>
+
+        <button id="logout-button" class="logout-button" type="button">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <section class="intro-layout">
+      <article class="panel intro-panel">
+        <p class="panel-kicker">Video Control</p>
+        <h2 class="section-title">Create video highlights, save them to Firestore, and manage the full archive.</h2>
+        <p class="section-copy">
+          This page is the admin workspace for club videos. Add a YouTube, Vimeo,
+          or direct video link, describe the clip, and keep the public video section fresh.
+        </p>
+
+        <div class="metric-row">
+          <div class="metric-card">
+            <span class="metric-label">Videos</span>
+            <strong id="video-count">0</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Form Mode</span>
+            <strong id="form-mode-label">Create</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Sync</span>
+            <strong id="sync-label">Connecting...</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel notes-panel">
+        <p class="panel-kicker">Helpful Notes</p>
+        <h2 class="section-title">What makes a strong video update?</h2>
+        <ul class="note-list">
+          <li>Use a clear title so visitors understand the clip before pressing play.</li>
+          <li>Add short descriptions that explain whether the video is a recap, drill, or highlight.</li>
+          <li>Use YouTube, Vimeo, or direct video links so the player stays reliable across the site.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="workspace-layout video-workspace-layout">
+      <article class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Video Form</p>
+            <h2 id="form-heading" class="section-title">Create a new video highlight</h2>
+          </div>
+
+          <span id="editing-chip" class="mode-chip" hidden>Editing existing item</span>
+        </div>
+
+        <form id="video-form" class="announcement-form" novalidate>
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label" for="video-title">Title</label>
+              <input
+                id="video-title"
+                class="field-input"
+                name="title"
+                type="text"
+                placeholder="Enter video title"
+                maxlength="120"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="video-date">Video Date</label>
+              <input
+                id="video-date"
+                class="field-input"
+                name="date"
+                type="date"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="video-url">Video URL</label>
+            <input
+              id="video-url"
+              class="field-input"
+              name="sourceUrl"
+              type="url"
+              placeholder="Paste a YouTube, Vimeo, or direct video URL"
+              maxlength="500"
+              required
+            />
+            <p class="helper-copy">
+              Supported: YouTube, Vimeo, and direct .mp4, .webm, .ogg, .ogv, .m4v, or .mov links.
+            </p>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="video-description">Description</label>
+            <textarea
+              id="video-description"
+              class="field-input field-textarea"
+              name="description"
+              placeholder="Write a short description for this video"
+              rows="5"
+              maxlength="320"
+              required
+            ></textarea>
+          </div>
+
+          <div class="video-preview-card">
+            <div id="video-preview-player" class="video-preview-player"></div>
+            <p id="video-preview-meta" class="video-preview-meta">
+              Paste a supported video link to preview it here before saving.
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button id="save-button" class="primary-button" type="submit">
+              Save video
+            </button>
+
+            <button id="cancel-edit-button" class="secondary-button" type="button" hidden>
+              Cancel edit
+            </button>
+          </div>
+
+          <p id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="panel list-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Saved Videos</p>
+            <h2 class="section-title">Existing videos</h2>
+          </div>
+
+          <p id="list-feedback" class="list-feedback" role="status" aria-live="polite">
+            Connecting to Firestore...
+          </p>
+        </div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          No videos saved yet. Add your first club video using the form.
+        </div>
+
+        <div id="videos-list" class="announcements-list videos-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script type="module" src="manage-videos.js"></script>
+</body>
+</html>

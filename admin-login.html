@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | Mubas Pickleball Club</title>
+  <link rel="stylesheet" href="admin-login.css" />
+</head>
+<body class="login-page">
+  <div class="login-glow" aria-hidden="true"></div>
+
+  <main class="login-main">
+    <section class="login-layout">
+      <article class="login-aside">
+        <a href="index.html" class="back-link">Back to Home</a>
+
+        <div class="login-brand">
+          <div class="login-logo-frame">
+            <img
+              src="assets/logo/log.jpeg"
+              alt="Mubas Pickleball Club logo"
+              class="login-logo"
+            />
+          </div>
+
+          <div class="login-copy-block">
+            <p class="login-kicker">Admin Access</p>
+            <h1 class="login-title">Sign in to manage club updates</h1>
+            <p class="login-copy">
+              Use the admin portal to update announcements, fixtures, gallery items, and video highlights for the club website.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <form id="admin-login-form" class="login-card" novalidate>
+        <div class="form-header">
+          <p class="form-kicker">Welcome back</p>
+          <h2 class="form-title">Admin Login</h2>
+          <p class="form-copy">Enter your email and password to continue.</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="admin-email">Email</label>
+          <input
+            id="admin-email"
+            class="field-input"
+            name="email"
+            type="email"
+            placeholder="admin@example.com"
+            autocomplete="email"
+            required
+          />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="admin-password">Password</label>
+          <input
+            id="admin-password"
+            class="field-input"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            required
+          />
+        </div>
+
+        <p id="login-feedback" class="form-feedback" role="alert" aria-live="polite"></p>
+
+        <button class="login-button" type="submit">Login</button>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="admin-login.js"></script>
+</body>
+</html>

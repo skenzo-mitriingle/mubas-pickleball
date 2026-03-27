@@ -1,0 +1,20 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isClubAdmin() {
+      return request.auth != null
+        && request.auth.token.email != null
+        && request.auth.token.email == "enockkaphukusi24@gmail.com";
+    }
+
+    match /gallery/{allPaths=**} {
+      allow read: if true;
+      allow write: if isClubAdmin();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

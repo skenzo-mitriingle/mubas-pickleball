@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Gallery | Mubas Pickleball Club</title>
+  <link rel="stylesheet" href="manage-announcements.css" />
+  <link rel="stylesheet" href="manage-gallery.css" />
+</head>
+<body class="manage-page manage-gallery-page" data-auth-state="checking">
+  <div class="manage-atmosphere" aria-hidden="true">
+    <div class="atmosphere-orb orb-a"></div>
+    <div class="atmosphere-orb orb-b"></div>
+    <div class="atmosphere-grid"></div>
+  </div>
+
+  <main class="manage-shell">
+    <header class="topbar panel">
+      <div class="topbar-links">
+        <a href="admin-dashboard.html" class="inline-link">Back to Dashboard</a>
+        <a href="gallery.html" class="inline-link inline-link-soft">View Public Gallery</a>
+      </div>
+
+      <div class="brand-lockup">
+        <div class="brand-frame">
+          <img
+            src="assets/logo/log.jpeg"
+            alt="Mubas Pickleball Club logo"
+            class="brand-logo"
+          />
+        </div>
+
+        <div>
+          <p class="panel-kicker">Admin Tools</p>
+          <h1 class="page-title">Manage Gallery</h1>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="session-chip">
+          <span class="session-dot" aria-hidden="true"></span>
+          <span id="admin-identity">Checking access...</span>
+        </div>
+
+        <button id="logout-button" class="logout-button" type="button">
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <section class="intro-layout">
+      <article class="panel intro-panel">
+        <p class="panel-kicker">Gallery Control</p>
+        <h2 class="section-title">Upload photos to Firebase Storage and manage the image archive in Firestore.</h2>
+        <p class="section-copy">
+          This page is the admin workspace for the club gallery. Upload a new image,
+          add a title and caption, and keep the public gallery fresh with edits and deletions.
+        </p>
+
+        <div class="metric-row">
+          <div class="metric-card">
+            <span class="metric-label">Gallery Items</span>
+            <strong id="gallery-count">0</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Form Mode</span>
+            <strong id="form-mode-label">Create</strong>
+          </div>
+
+          <div class="metric-card">
+            <span class="metric-label">Sync</span>
+            <strong id="sync-label">Connecting...</strong>
+          </div>
+        </div>
+      </article>
+
+      <aside class="panel notes-panel">
+        <p class="panel-kicker">Helpful Notes</p>
+        <h2 class="section-title">What makes a strong gallery update?</h2>
+        <ul class="note-list">
+          <li>Choose sharp photos that show movement, people, and energy from the court.</li>
+          <li>Use short captions that explain the moment without making the card heavy.</li>
+          <li>Keep the newest and clearest photos near the top so the public gallery feels active.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="workspace-layout gallery-workspace-layout">
+      <article class="panel form-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Gallery Form</p>
+            <h2 id="form-heading" class="section-title">Upload a new gallery image</h2>
+          </div>
+
+          <span id="editing-chip" class="mode-chip" hidden>Editing existing item</span>
+        </div>
+
+        <form id="gallery-form" class="announcement-form" novalidate>
+          <div class="field-grid">
+            <div class="field-group">
+              <label class="field-label" for="gallery-title">Title</label>
+              <input
+                id="gallery-title"
+                class="field-input"
+                name="title"
+                type="text"
+                placeholder="Enter gallery title"
+                maxlength="120"
+                required
+              />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="gallery-date">Photo Date</label>
+              <input
+                id="gallery-date"
+                class="field-input"
+                name="date"
+                type="date"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="gallery-caption">Caption</label>
+            <textarea
+              id="gallery-caption"
+              class="field-input field-textarea"
+              name="caption"
+              placeholder="Write a short caption for this photo"
+              rows="5"
+              maxlength="280"
+              required
+            ></textarea>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="gallery-image">Image File</label>
+            <input
+              id="gallery-image"
+              class="field-input file-input"
+              name="image"
+              type="file"
+              accept="image/*"
+            />
+            <p id="replace-image-note" class="helper-copy">
+              Choose an image file to upload to Firebase Storage.
+            </p>
+            <p id="selected-image-name" class="helper-copy helper-copy-strong">
+              No image selected yet.
+            </p>
+          </div>
+
+          <div class="gallery-preview-card">
+            <div class="gallery-preview-media">
+              <img id="preview-image" class="gallery-preview-image" src="" alt="" hidden />
+              <div id="preview-empty" class="gallery-preview-empty">
+                Selected image preview will appear here.
+              </div>
+            </div>
+            <p id="preview-meta" class="gallery-preview-meta">
+              Firebase Storage preview ready for the next upload.
+            </p>
+          </div>
+
+          <div class="form-actions">
+            <button id="save-button" class="primary-button" type="submit">
+              Save gallery item
+            </button>
+
+            <button id="cancel-edit-button" class="secondary-button" type="button" hidden>
+              Cancel edit
+            </button>
+          </div>
+
+          <p id="form-feedback" class="form-feedback" role="alert" aria-live="polite"></p>
+        </form>
+      </article>
+
+      <article class="panel list-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="panel-kicker">Saved Gallery</p>
+            <h2 class="section-title">Existing gallery items</h2>
+          </div>
+
+          <p id="list-feedback" class="list-feedback" role="status" aria-live="polite">
+            Connecting to Firebase...
+          </p>
+        </div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          No gallery items saved yet. Upload your first club image using the form.
+        </div>
+
+        <div id="gallery-list" class="gallery-list"></div>
+      </article>
+    </section>
+  </main>
+
+  <script type="module" src="manage-gallery.js"></script>
+</body>
+</html>
