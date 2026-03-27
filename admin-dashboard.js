@@ -33,7 +33,7 @@ const dashboardSections = {
       "Write short captions that explain the event, match, or special moment.",
       "Keep the newest and clearest photos near the top for fresh presentation."
     ],
-    feedback: "Gallery selected. Open the manager page to upload images to Firebase Storage and manage Firestore gallery items.",
+    feedback: "Gallery selected. Open the manager page to upload images and manage Firestore gallery items.",
     actionLabel: "Open gallery manager",
     actionHref: "manage-gallery.html"
   },

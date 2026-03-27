@@ -6,9 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
 import { db } from "./firebase-config.js";
 import {
-  createVideoMediaElement,
-  getVideoAction,
-  getVideoProviderLabel
+  createVideoMediaElement
 } from "./video-utils.js";
 
 const ANNOUNCEMENTS_COLLECTION = "announcements";
@@ -143,7 +141,6 @@ function cacheAnnouncements(items) {
   try {
     const cachePayload = items.map((item) => ({
       id: item.id || "",
-      title: item.title || "",
       date: item.date || "",
       excerpt: item.excerpt || item.message || "",
       createdAtMs: getTimestampMilliseconds(item.createdAt),
@@ -175,7 +172,6 @@ function readCachedAnnouncements() {
 
     return parsedCache.map((item, index) => ({
       id: typeof item.id === "string" && item.id ? item.id : `cached-${index}`,
-      title: typeof item.title === "string" ? item.title : "",
       date: typeof item.date === "string" ? item.date : "",
       excerpt: typeof item.excerpt === "string" ? item.excerpt : "",
       createdAt: getTimestampMilliseconds(item.createdAtMs),
@@ -191,11 +187,9 @@ function cacheGalleryItems(items) {
   try {
     const cachePayload = items.map((item) => ({
       id: item.id || "",
-      title: item.title || "",
       date: item.date || "",
       caption: item.caption || "",
       imageUrl: item.imageUrl || "",
-      storagePath: item.storagePath || "",
       createdAtMs: getTimestampMilliseconds(item.createdAt),
       updatedAtMs: getTimestampMilliseconds(item.updatedAt)
     }));
@@ -270,11 +264,9 @@ function readCachedGalleryItems() {
 
     return parsedCache.map((item, index) => ({
       id: typeof item.id === "string" && item.id ? item.id : `gallery-cached-${index}`,
-      title: typeof item.title === "string" ? item.title : "",
       date: typeof item.date === "string" ? item.date : "",
       caption: typeof item.caption === "string" ? item.caption : "",
       imageUrl: typeof item.imageUrl === "string" ? item.imageUrl : "",
-      storagePath: typeof item.storagePath === "string" ? item.storagePath : "",
       createdAt: getTimestampMilliseconds(item.createdAtMs),
       updatedAt: getTimestampMilliseconds(item.updatedAtMs)
     })).filter((item) => item.imageUrl);
@@ -832,7 +824,7 @@ function extractImageExtension(imageUrl) {
 }
 
 function buildDownloadFileName(item) {
-  const baseName = (item?.title || "mubas-gallery-image")
+  const baseName = (item?.caption || item?.date || "mubas-gallery-image")
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -856,7 +848,7 @@ function findGalleryItemIndex(items, item) {
 
   return items.findIndex((entry) => (
     entry.imageUrl === item.imageUrl
-    && entry.title === item.title
+    && entry.caption === item.caption
     && entry.date === item.date
   ));
 }
@@ -892,14 +884,14 @@ function updateHomeGalleryNavigationState() {
   if (homeGalleryLightboxPrev && previousItem) {
     homeGalleryLightboxPrev.setAttribute(
       "aria-label",
-      `Show previous image: ${previousItem.title || previousItem.caption || "Gallery image"}`
+      `Show previous image: ${previousItem.caption || "Gallery image"}`
     );
   }
 
   if (homeGalleryLightboxNext && nextItem) {
     homeGalleryLightboxNext.setAttribute(
       "aria-label",
-      `Show next image: ${nextItem.title || nextItem.caption || "Gallery image"}`
+      `Show next image: ${nextItem.caption || "Gallery image"}`
     );
   }
 }
@@ -916,7 +908,7 @@ function renderHomeGalleryLightboxItem(item) {
 
   activeHomeGalleryItem = item;
   homeGalleryLightboxImage.src = item.imageUrl;
-  homeGalleryLightboxImage.alt = item.title || item.caption || "Full gallery image";
+  homeGalleryLightboxImage.alt = item.caption || "Full gallery image";
   updateHomeGalleryNavigationState();
 }
 
@@ -1099,15 +1091,11 @@ function renderAnnouncements(items) {
     date.className = "card-date";
     date.textContent = formatAnnouncementDate(item.date, item.createdAt);
 
-    const heading = document.createElement("h3");
-    heading.className = "card-title";
-    heading.textContent = item.title || "Untitled announcement";
-
     const copy = document.createElement("p");
     copy.className = "card-text";
     copy.textContent = item.excerpt || item.message || "More details will be shared soon.";
 
-    card.append(date, heading, copy);
+    card.append(date, copy);
     container.appendChild(card);
   });
 }
@@ -1236,7 +1224,7 @@ function renderGallery(items) {
     card.setAttribute("role", "button");
     card.setAttribute(
       "aria-label",
-      `Open full image: ${item.title || item.caption || "Gallery image"}`
+      `Open full image: ${item.caption || "Gallery image"}`
     );
     card.addEventListener("click", () => {
       openHomeGalleryLightbox(item);
@@ -1253,9 +1241,10 @@ function renderGallery(items) {
 
     const image = document.createElement("img");
     image.src = item.imageUrl;
-    image.alt = item.title || item.caption || "Gallery image";
+    image.alt = item.caption || "Gallery image";
     image.className = "gallery-image";
     image.loading = "lazy";
+    image.decoding = "async";
 
     const overlay = document.createElement("span");
     overlay.className = "gallery-card-overlay";
@@ -1283,7 +1272,7 @@ function renderGallery(items) {
       item.id === activeHomeGalleryItem.id
       || (
         item.imageUrl === activeHomeGalleryItem.imageUrl
-        && item.title === activeHomeGalleryItem.title
+        && item.caption === activeHomeGalleryItem.caption
         && item.date === activeHomeGalleryItem.date
       )
     ));
@@ -1409,59 +1398,21 @@ function renderVideos(items) {
 
   container.replaceChildren();
 
-  visibleVideos.forEach((item, index) => {
-    const action = getVideoAction(item);
+  visibleVideos.forEach((item) => {
     const card = document.createElement("article");
     card.className = "glass-card video-card";
 
     const media = createVideoMediaElement(item, {
-      title: item.title || "Club video"
+      title: item.title || item.description || "Club video"
     });
 
     const copy = document.createElement("div");
-    copy.className = "video-copy";
-
-    const head = document.createElement("div");
-    head.className = "video-card-head";
-
-    const chip = document.createElement("span");
-    chip.className = "video-chip";
-    chip.textContent = index === 0 ? "Latest" : getVideoProviderLabel(item.provider);
+    copy.className = "video-copy video-copy-compact";
 
     const date = document.createElement("p");
     date.className = "card-date";
     date.textContent = formatVideoDate(item.date, item.createdAt);
-
-    head.append(chip, date);
-
-    const description = document.createElement("p");
-    description.className = "card-text";
-    description.textContent = item.description || "More details for this club video will be shared soon.";
-
-    copy.appendChild(head);
-
-    if (item.title) {
-      const title = document.createElement("h3");
-      title.className = "card-title";
-      title.textContent = item.title;
-      copy.appendChild(title);
-    }
-
-    copy.appendChild(description);
-
-    if (action.href) {
-      const actions = document.createElement("div");
-      actions.className = "video-card-actions";
-
-      const sourceLink = document.createElement("a");
-      sourceLink.className = "btn btn-secondary video-source-link";
-      sourceLink.href = action.href;
-      sourceLink.target = "_blank";
-      sourceLink.rel = "noreferrer";
-      sourceLink.textContent = action.label;
-      actions.appendChild(sourceLink);
-      copy.appendChild(actions);
-    }
+    copy.appendChild(date);
 
     card.append(media, copy);
     container.appendChild(card);

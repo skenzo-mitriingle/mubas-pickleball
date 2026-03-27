@@ -169,13 +169,6 @@ body.site-body.gallery-page .nav-link[aria-current="page"] {
   gap: 0.5rem;
 }
 
-.gallery-featured-title {
-  margin: 0;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 900;
-  line-height: 1.05;
-}
-
 .gallery-featured-meta {
   margin: 0.5rem 0 0;
   color: var(--text-dim);

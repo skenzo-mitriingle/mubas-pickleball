@@ -7,8 +7,7 @@ import {
 import { db } from "./firebase-config.js";
 import {
   createVideoMediaElement,
-  getVideoAction,
-  getVideoProviderLabel
+  getVideoAction
 } from "./video-utils.js";
 
 const VIDEOS_COLLECTION = "videoItems";
@@ -367,8 +366,7 @@ function renderVideoArchive(items) {
 
   container.replaceChildren();
 
-  sortedVideos.forEach((item, index) => {
-    const action = getVideoAction(item);
+  sortedVideos.forEach((item) => {
     const card = document.createElement("article");
     card.className = "glass-card video-archive-card";
 
@@ -379,53 +377,10 @@ function renderVideoArchive(items) {
     const copy = document.createElement("div");
     copy.className = "video-archive-copy";
 
-    const head = document.createElement("div");
-    head.className = "video-archive-head";
-
-    const chip = document.createElement("span");
-    chip.className = "video-chip";
-    chip.textContent = index === 0
-      ? "Latest"
-      : getVideoProviderLabel(item.provider);
-
     const date = document.createElement("p");
     date.className = "card-date";
     date.textContent = formatVideoDate(item.date, item.createdAt);
-
-    head.append(chip, date);
-
-    const description = document.createElement("p");
-    description.className = "video-archive-text";
-    description.textContent = item.description || "More details for this club video will be shared soon.";
-
-    const meta = document.createElement("p");
-    meta.className = "video-archive-meta";
-    meta.textContent = `Updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
-
-    copy.appendChild(head);
-
-    if (item.title) {
-      const title = document.createElement("h3");
-      title.className = "video-archive-title";
-      title.textContent = item.title;
-      copy.appendChild(title);
-    }
-
-    copy.append(description, meta);
-
-    if (action.href) {
-      const actions = document.createElement("div");
-      actions.className = "video-archive-actions";
-
-      const sourceLink = document.createElement("a");
-      sourceLink.className = "btn btn-secondary video-archive-link";
-      sourceLink.href = action.href;
-      sourceLink.target = "_blank";
-      sourceLink.rel = "noreferrer";
-      sourceLink.textContent = action.label;
-      actions.appendChild(sourceLink);
-      copy.appendChild(actions);
-    }
+    copy.appendChild(date);
 
     card.append(media, copy);
     container.appendChild(card);
@@ -444,7 +399,7 @@ async function loadVideos() {
     renderArchiveState(
       "Loading videos...",
       "Fetching the latest club highlights.",
-      "Live Videos"
+      "Videos"
     );
     setArchiveStatus("Loading latest updates...");
   }

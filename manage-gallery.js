@@ -5,6 +5,7 @@ import {
 import {
   addDoc,
   collection,
+  deleteField,
   deleteDoc,
   doc,
   getDocs,
@@ -12,13 +13,7 @@ import {
   query,
   updateDoc
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import { auth, db, storage } from "./firebase-config.js";
+import { auth, db } from "./firebase-config.js";
 
 const GALLERY_COLLECTION = "galleryItems";
 const GALLERY_CACHE_KEY = "mubas-pickleball:gallery-cache";
@@ -33,7 +28,6 @@ const syncLabel = document.getElementById("sync-label");
 const editingChip = document.getElementById("editing-chip");
 const formHeading = document.getElementById("form-heading");
 const galleryForm = document.getElementById("gallery-form");
-const titleInput = document.getElementById("gallery-title");
 const dateInput = document.getElementById("gallery-date");
 const captionInput = document.getElementById("gallery-caption");
 const imageInput = document.getElementById("gallery-image");
@@ -78,7 +72,7 @@ function setFieldError(input, hasError) {
 }
 
 function clearFieldErrors() {
-  [titleInput, dateInput, captionInput, imageInput].forEach((input) => {
+  [dateInput, captionInput, imageInput].forEach((input) => {
     setFieldError(input, false);
   });
 }
@@ -120,11 +114,10 @@ function cacheGalleryItems(items) {
   try {
     const cachePayload = items.map((item) => ({
       id: item.id || "",
-      title: item.title || "",
       date: item.date || "",
       caption: item.caption || "",
       imageUrl: item.imageUrl || "",
-      storagePath: item.storagePath || "",
+      publicId: item.publicId || "",
       createdAtMs: getTimestampMilliseconds(item.createdAt),
       updatedAtMs: getTimestampMilliseconds(item.updatedAt)
     }));
@@ -159,7 +152,7 @@ function getGalleryErrorMessage(error, fallbackMessage) {
     error?.code === "permission-denied" ||
     error?.code === "storage/unauthorized"
   ) {
-    return "Firebase rules are blocking this gallery action. Confirm that Firestore and Storage allow your admin account to manage gallery items.";
+    return "Access to the gallery data is blocked. Confirm that your admin account can manage gallery items.";
   }
 
   if (error?.code === "unauthenticated") {
@@ -182,12 +175,12 @@ function getGalleryErrorMessage(error, fallbackMessage) {
     return "Firebase did not respond in time. Please check the connection and try again.";
   }
 
-  if (error?.code === "storage/quota-exceeded") {
-    return "Firebase Storage quota has been exceeded. Free up space or check your Firebase plan.";
+  if (error?.code === "upload-failed") {
+    return "The image service could not accept this upload. Try another image or try again in a moment.";
   }
 
-  if (error?.code === "storage/canceled") {
-    return "The image upload was canceled before it finished.";
+  if (error instanceof TypeError) {
+    return "The image upload service could not be reached. Check your internet connection and try again.";
   }
 
   return fallbackMessage;
@@ -282,7 +275,7 @@ function updatePreviewFromState() {
     transientPreviewUrl = window.URL.createObjectURL(file);
     showPreviewState(
       transientPreviewUrl,
-      titleInput.value.trim() || file.name,
+      captionInput.value.trim() || file.name,
       `Selected file: ${file.name}`
     );
     setSelectedImageMessage(file.name);
@@ -296,16 +289,16 @@ function updatePreviewFromState() {
       clearTransientPreview();
       showPreviewState(
         currentItem.imageUrl,
-        currentItem.title || "Current gallery image",
-        "Current Firebase Storage image. Select a new file only if you want to replace it."
+        currentItem.caption || "Current gallery image",
+        "Current gallery image. Select a new file only if you want to replace it."
       );
-      setSelectedImageMessage("Keeping the current Firebase image.");
+      setSelectedImageMessage("Keeping the current gallery image.");
       return;
     }
   }
 
   clearTransientPreview();
-  showPreviewState("", "", "Firebase Storage preview ready for the next upload.");
+  showPreviewState("", "", "Image preview ready for the next upload.");
   setSelectedImageMessage("No image selected yet.");
 }
 
@@ -336,8 +329,8 @@ function updateFormMode() {
 
   if (replaceImageNote) {
     replaceImageNote.textContent = isEditing
-      ? "Leave the image field empty to keep the current Firebase Storage image."
-      : "Choose an image file to upload to Firebase Storage.";
+      ? "Leave the image field empty to keep the current gallery image."
+      : "Choose an image file to upload.";
   }
 }
 
@@ -373,7 +366,6 @@ function setSubmittingState(isBusy) {
 
 function getGalleryValues() {
   return {
-    title: titleInput.value.trim(),
     date: dateInput.value,
     caption: captionInput.value.trim()
   };
@@ -386,13 +378,6 @@ function validateGallery(values, imageFile) {
     setFieldError(dateInput, true);
     setFeedback(formFeedback, "Choose the photo date.", "error");
     dateInput.focus();
-    return false;
-  }
-
-  if (!values.caption) {
-    setFieldError(captionInput, true);
-    setFeedback(formFeedback, "Enter a short caption for this image.", "error");
-    captionInput.focus();
     return false;
   }
 
@@ -469,8 +454,9 @@ function renderGalleryItems(items) {
     const image = document.createElement("img");
     image.className = "gallery-item-image";
     image.src = item.imageUrl || "";
-    image.alt = item.title || item.caption || "Gallery image";
+    image.alt = item.caption || "Gallery image";
     image.loading = "lazy";
+    image.decoding = "async";
 
     media.appendChild(image);
 
@@ -504,34 +490,24 @@ function renderGalleryItems(items) {
     actions.append(editButton, deleteButton);
     head.append(date, actions);
 
-    const title = document.createElement("h3");
-    title.className = "gallery-item-title";
-    title.textContent = item.title || "";
-
     const caption = document.createElement("p");
     caption.className = "gallery-item-caption";
-    caption.textContent = item.caption || "No caption yet.";
+    caption.textContent = item.caption || "No caption added.";
 
     const meta = document.createElement("p");
     meta.className = "gallery-item-meta";
     meta.textContent = `Saved ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 
-    copy.append(head);
-
-    if (item.title) {
-      copy.appendChild(title);
-    }
-
-    copy.append(caption, meta);
+    copy.append(head, caption, meta);
     layout.append(media, copy);
     card.appendChild(layout);
     galleryList.appendChild(card);
   });
 }
 
-async function loadGallery(successMessage = "Gallery synced with Firebase.") {
+async function loadGallery(successMessage = "Gallery refreshed.") {
   const hadItems = currentGalleryItems.length > 0;
-  setFeedback(listFeedback, "Loading gallery items from Firestore...", "info");
+  setFeedback(listFeedback, "Loading gallery items...", "info");
 
   if (syncLabel) {
     syncLabel.textContent = "Loading";
@@ -574,7 +550,7 @@ async function loadGallery(successMessage = "Gallery synced with Firebase.") {
 
     setFeedback(
       listFeedback,
-      getGalleryErrorMessage(error, "Could not load gallery items from Firestore."),
+      getGalleryErrorMessage(error, "Could not load gallery items right now."),
       "error"
     );
     console.error(error);
@@ -592,7 +568,6 @@ function beginEditingGalleryItem(galleryId) {
 
   editingGalleryId = galleryId;
   imageInput.value = "";
-  titleInput.value = item.title || "";
   dateInput.value = item.date || "";
   captionInput.value = item.caption || "";
   clearFieldErrors();
@@ -601,21 +576,6 @@ function beginEditingGalleryItem(galleryId) {
   renderGalleryItems(currentGalleryItems);
   setFeedback(formFeedback, "Editing gallery item. Update the fields and save.", "info");
   captionInput.focus();
-}
-
-function sanitizeFileName(fileName) {
-  return fileName
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9.]+/g, "-")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "") || "gallery-image";
-}
-
-function buildGalleryStoragePath(file) {
-  const safeName = sanitizeFileName(file.name || "gallery-image");
-  const uniquePart = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-  return `gallery/${uniquePart}-${safeName}`;
 }
 
 async function uploadGalleryImage(file) {
@@ -636,7 +596,11 @@ async function uploadGalleryImage(file) {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error("Cloudinary upload failed");
+    const uploadError = new Error(
+      data?.error?.message || "The image service rejected this upload."
+    );
+    uploadError.code = "upload-failed";
+    throw uploadError;
   }
 
   return {
@@ -646,8 +610,7 @@ async function uploadGalleryImage(file) {
 }
 
 async function deleteStoredImage(publicId) {
-  // For now, skip delete (Cloudinary delete needs backend)
-  console.log("Delete not implemented yet:", publicId);
+  void publicId;
 }
 
 async function removeGalleryItem(galleryId, button) {
@@ -658,7 +621,7 @@ async function removeGalleryItem(galleryId, button) {
     return;
   }
 
-  const confirmed = window.confirm(`Delete "${item.title || item.caption || "this gallery image"}" from the gallery?`);
+  const confirmed = window.confirm(`Delete "${item.caption || "this gallery image"}" from the gallery?`);
 
   if (!confirmed) {
     return;
@@ -677,11 +640,13 @@ async function removeGalleryItem(galleryId, button) {
       "Deleting gallery item timed out."
     );
 
-    if (item.storagePath) {
+    const remoteImageId = item.publicId || item.storagePath || "";
+
+    if (remoteImageId) {
       try {
-        await deleteStoredImage(item.storagePath);
+        await deleteStoredImage(remoteImageId);
       } catch (storageError) {
-        console.warn("The Firestore item was deleted, but the Storage file could not be removed.", storageError);
+        console.warn("The gallery item was deleted, but the uploaded image could not be removed.", storageError);
       }
     }
 
@@ -733,7 +698,7 @@ async function handleFormSubmit(event) {
   setSubmittingState(true);
   setFeedback(
     formFeedback,
-    selectedFile ? "Uploading image to Firebase Storage..." : "Saving gallery item...",
+    selectedFile ? "Uploading image..." : "Saving gallery item...",
     "info"
   );
 
@@ -749,12 +714,12 @@ async function handleFormSubmit(event) {
 
     if (editingGalleryId) {
       let imageUrl = existingItem.imageUrl || "";
-      let storagePath = existingItem.storagePath || "";
+      let publicId = existingItem.publicId || existingItem.storagePath || "";
 
       if (selectedFile) {
         uploadedImage = await uploadGalleryImage(selectedFile);
         imageUrl = uploadedImage.imageUrl;
-        storagePath = uploadedImage.storagePath;
+        publicId = uploadedImage.publicId;
         setFeedback(formFeedback, "Image uploaded. Saving gallery metadata...", "info");
       }
 
@@ -764,11 +729,12 @@ async function handleFormSubmit(event) {
 
       await withTimeout(
         updateDoc(doc(db, GALLERY_COLLECTION, editingGalleryId), {
-          title: values.title,
+          title: deleteField(),
           date: values.date,
           caption: values.caption,
           imageUrl,
-          storagePath,
+          publicId,
+          storagePath: deleteField(),
           updatedAt: timestamp
         }),
         "Updating gallery item timed out."
@@ -777,17 +743,17 @@ async function handleFormSubmit(event) {
 
       if (
         uploadedImage &&
-        existingItem.storagePath &&
-        existingItem.storagePath !== uploadedImage.storagePath
+        existingItem.publicId &&
+        existingItem.publicId !== uploadedImage.publicId
       ) {
         try {
-          await deleteStoredImage(existingItem.storagePath);
+          await deleteStoredImage(existingItem.publicId);
         } catch (storageError) {
           console.warn("The gallery item was updated, but the previous image could not be removed.", storageError);
         }
       }
 
-      await loadGallery("Gallery synced with Firebase.");
+      await loadGallery("Gallery refreshed.");
       setFeedback(formFeedback, "Gallery item updated successfully.", "success");
     } else {
       uploadedImage = await uploadGalleryImage(selectedFile);
@@ -798,7 +764,6 @@ async function handleFormSubmit(event) {
 
       await withTimeout(
         addDoc(collection(db, GALLERY_COLLECTION), {
-          title: values.title,
           date: values.date,
           caption: values.caption,
           imageUrl: uploadedImage.imageUrl,
@@ -810,15 +775,15 @@ async function handleFormSubmit(event) {
       );
       didPersistGalleryItem = true;
 
-      await loadGallery("Gallery synced with Firebase.");
-      setFeedback(formFeedback, "Gallery item saved to Firebase.", "success");
+      await loadGallery("Gallery refreshed.");
+      setFeedback(formFeedback, "Gallery item saved successfully.", "success");
     }
 
     resetForm();
   } catch (error) {
     if (uploadedImage && !didPersistGalleryItem) {
       try {
-        await deleteStoredImage(uploadedImage.storagePath);
+        await deleteStoredImage(uploadedImage.publicId);
       } catch (cleanupError) {
         console.warn("A temporary uploaded image could not be cleaned up after a failed save.", cleanupError);
       }

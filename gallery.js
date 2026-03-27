@@ -85,11 +85,9 @@ function cacheGalleryItems(items) {
   try {
     const cachePayload = items.map((item) => ({
       id: item.id || "",
-      title: item.title || "",
       date: item.date || "",
       caption: item.caption || "",
       imageUrl: item.imageUrl || "",
-      storagePath: item.storagePath || "",
       createdAtMs: getTimestampMilliseconds(item.createdAt),
       updatedAtMs: getTimestampMilliseconds(item.updatedAt)
     }));
@@ -119,11 +117,9 @@ function readCachedGalleryItems() {
 
     return parsedCache.map((item, index) => ({
       id: typeof item.id === "string" && item.id ? item.id : `gallery-cached-${index}`,
-      title: typeof item.title === "string" ? item.title : "",
       date: typeof item.date === "string" ? item.date : "",
       caption: typeof item.caption === "string" ? item.caption : "",
       imageUrl: typeof item.imageUrl === "string" ? item.imageUrl : "",
-      storagePath: typeof item.storagePath === "string" ? item.storagePath : "",
       createdAt: getTimestampMilliseconds(item.createdAtMs),
       updatedAt: getTimestampMilliseconds(item.updatedAtMs)
     })).filter((item) => item.imageUrl);
@@ -281,7 +277,7 @@ function extractImageExtension(imageUrl) {
 }
 
 function buildDownloadFileName(item) {
-  const baseName = (item?.title || "mubas-gallery-image")
+  const baseName = (item?.caption || item?.date || "mubas-gallery-image")
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
@@ -305,7 +301,7 @@ function findGalleryItemIndex(items, item) {
 
   return items.findIndex((entry) => (
     entry.imageUrl === item.imageUrl
-    && entry.title === item.title
+    && entry.caption === item.caption
     && entry.date === item.date
   ));
 }
@@ -341,14 +337,14 @@ function updateGalleryLightboxNavigationState() {
   if (galleryLightboxPrev && previousItem) {
     galleryLightboxPrev.setAttribute(
       "aria-label",
-      `Show previous image: ${previousItem.title || previousItem.caption || "Gallery image"}`
+      `Show previous image: ${previousItem.caption || "Gallery image"}`
     );
   }
 
   if (galleryLightboxNext && nextItem) {
     galleryLightboxNext.setAttribute(
       "aria-label",
-      `Show next image: ${nextItem.title || nextItem.caption || "Gallery image"}`
+      `Show next image: ${nextItem.caption || "Gallery image"}`
     );
   }
 }
@@ -364,7 +360,7 @@ function setFeaturedTriggerState(item) {
   featuredGalleryTrigger.setAttribute(
     "aria-label",
     featuredGalleryItem
-      ? `Open full image: ${featuredGalleryItem.title || featuredGalleryItem.caption || "Featured gallery image"}`
+      ? `Open full image: ${featuredGalleryItem.caption || "Featured gallery image"}`
       : "Open featured gallery image"
   );
 }
@@ -381,7 +377,7 @@ function renderGalleryLightboxItem(item) {
 
   activeLightboxItem = item;
   galleryLightboxImage.src = item.imageUrl;
-  galleryLightboxImage.alt = item.title || item.caption || "Full gallery image";
+  galleryLightboxImage.alt = item.caption || "Full gallery image";
   updateGalleryLightboxNavigationState();
 }
 
@@ -521,7 +517,6 @@ function renderFeaturedGalleryItem(item) {
   const featuredImage = document.getElementById("featured-gallery-image");
   const featuredEmpty = document.getElementById("featured-gallery-empty");
   const featuredDate = document.getElementById("featured-gallery-date");
-  const featuredTitle = document.getElementById("featured-gallery-title");
   const featuredCaption = document.getElementById("featured-gallery-caption");
   const featuredMeta = document.getElementById("featured-gallery-meta");
 
@@ -529,7 +524,6 @@ function renderFeaturedGalleryItem(item) {
     !featuredImage ||
     !featuredEmpty ||
     !featuredDate ||
-    !featuredTitle ||
     !featuredCaption ||
     !featuredMeta
   ) {
@@ -544,7 +538,6 @@ function renderFeaturedGalleryItem(item) {
     featuredEmpty.hidden = false;
     featuredEmpty.textContent = "No featured photo yet.";
     featuredDate.textContent = "No photos yet";
-    featuredTitle.textContent = "The gallery is ready for the first image";
     featuredCaption.textContent = "When the club uploads a new photo, it will appear here and in the full archive below.";
     featuredMeta.textContent = "Latest spotlight will update automatically.";
     return;
@@ -552,11 +545,10 @@ function renderFeaturedGalleryItem(item) {
 
   setFeaturedTriggerState(item);
   featuredImage.src = item.imageUrl;
-  featuredImage.alt = item.title || item.caption || "Featured gallery image";
+  featuredImage.alt = item.caption || "Featured gallery image";
   featuredImage.hidden = false;
   featuredEmpty.hidden = true;
   featuredDate.textContent = formatGalleryDate(item.date, item.createdAt);
-  featuredTitle.textContent = item.title || "Club gallery image";
   featuredCaption.textContent = item.caption || "More context for this gallery image will be shared soon.";
   featuredMeta.textContent = `Last updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 }
@@ -624,13 +616,14 @@ function renderGalleryArchive(items) {
     mediaButton.type = "button";
     mediaButton.setAttribute(
       "aria-label",
-      `Open full image: ${item.title || item.caption || "Gallery image"}`
+      `Open full image: ${item.caption || "Gallery image"}`
     );
 
     const image = document.createElement("img");
     image.src = item.imageUrl;
-    image.alt = item.title || item.caption || "Gallery image";
+    image.alt = item.caption || "Gallery image";
     image.loading = "lazy";
+    image.decoding = "async";
 
     const overlay = document.createElement("span");
     overlay.className = "gallery-card-overlay";
@@ -662,7 +655,7 @@ function renderGalleryArchive(items) {
       item.id === activeLightboxItem.id
       || (
         item.imageUrl === activeLightboxItem.imageUrl
-        && item.title === activeLightboxItem.title
+        && item.caption === activeLightboxItem.caption
         && item.date === activeLightboxItem.date
       )
     ));
@@ -687,7 +680,7 @@ async function loadGallery() {
     renderGalleryState(
       "Loading gallery...",
       "Fetching the latest club photos.",
-      "Live Gallery"
+      "Gallery"
     );
     setGalleryStatus("Loading latest updates...");
   }

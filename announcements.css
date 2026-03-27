@@ -107,13 +107,6 @@ body.site-body.announcements-page .nav-link[aria-current="page"] {
   line-height: 1;
 }
 
-.archive-featured-title {
-  margin: 0.75rem 0 0;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 900;
-  line-height: 1.05;
-}
-
 .archive-featured-meta {
   margin: 1rem 0 0;
   color: var(--text-dim);
@@ -169,10 +162,6 @@ body.site-body.announcements-page .nav-link[aria-current="page"] {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.archive-card-title {
-  margin: 1rem 0 0;
 }
 
 .archive-card-copy {

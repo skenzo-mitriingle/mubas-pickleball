@@ -73,7 +73,6 @@ function cacheAnnouncements(items) {
   try {
     const cachePayload = items.map((item) => ({
       id: item.id || "",
-      title: item.title || "",
       date: item.date || "",
       excerpt: item.excerpt || item.message || "",
       createdAtMs: getTimestampMilliseconds(item.createdAt),
@@ -105,7 +104,6 @@ function readCachedAnnouncements() {
 
     return parsedCache.map((item, index) => ({
       id: typeof item.id === "string" && item.id ? item.id : `cached-${index}`,
-      title: typeof item.title === "string" ? item.title : "",
       date: typeof item.date === "string" ? item.date : "",
       excerpt: typeof item.excerpt === "string" ? item.excerpt : "",
       createdAt: getTimestampMilliseconds(item.createdAtMs),
@@ -255,24 +253,21 @@ function updateArchiveStats(items) {
 
 function renderFeaturedAnnouncement(item) {
   const featuredDate = document.getElementById("featured-date");
-  const featuredTitle = document.getElementById("featured-title");
   const featuredCopy = document.getElementById("featured-copy");
   const featuredMeta = document.getElementById("featured-meta");
 
-  if (!featuredDate || !featuredTitle || !featuredCopy || !featuredMeta) {
+  if (!featuredDate || !featuredCopy || !featuredMeta) {
     return;
   }
 
   if (!item) {
     featuredDate.textContent = "No updates yet";
-    featuredTitle.textContent = "The archive is ready for the first announcement";
     featuredCopy.textContent = "When the club publishes a new notice, it will appear here and in the full archive below.";
     featuredMeta.textContent = "Latest spotlight will update automatically.";
     return;
   }
 
   featuredDate.textContent = formatAnnouncementDate(item.date, item.createdAt);
-  featuredTitle.textContent = item.title || "Untitled announcement";
   featuredCopy.textContent = item.excerpt || item.message || "More details will be shared soon.";
   featuredMeta.textContent = `Last updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 }
@@ -341,10 +336,6 @@ function renderAnnouncementsArchive(items) {
 
     head.append(chip, date);
 
-    const title = document.createElement("h3");
-    title.className = "card-title archive-card-title";
-    title.textContent = item.title || "Untitled announcement";
-
     const copy = document.createElement("p");
     copy.className = "card-text archive-card-copy";
     copy.textContent = item.excerpt || item.message || "More details will be shared soon.";
@@ -353,7 +344,7 @@ function renderAnnouncementsArchive(items) {
     meta.className = "archive-card-meta";
     meta.textContent = `Updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 
-    card.append(head, title, copy, meta);
+    card.append(head, copy, meta);
     container.appendChild(card);
   });
 }

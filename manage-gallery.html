@@ -51,10 +51,10 @@
     <section class="intro-layout">
       <article class="panel intro-panel">
         <p class="panel-kicker">Gallery Control</p>
-        <h2 class="section-title">Upload photos to Firebase Storage and manage the image archive in Firestore.</h2>
+        <h2 class="section-title">Upload photos and manage the image archive from one place.</h2>
         <p class="section-copy">
           This page is the admin workspace for the club gallery. Upload a new image,
-          add an optional short title and caption, and keep the public gallery fresh with edits and deletions.
+          add an optional caption, and keep the public gallery fresh with edits and deletions.
         </p>
 
         <div class="metric-row">
@@ -100,18 +100,6 @@
         <form id="gallery-form" class="announcement-form" novalidate>
           <div class="field-grid">
             <div class="field-group">
-              <label class="field-label" for="gallery-title">Title (Optional)</label>
-              <input
-                id="gallery-title"
-                class="field-input"
-                name="title"
-                type="text"
-                placeholder="Optional short title"
-                maxlength="70"
-              />
-            </div>
-
-            <div class="field-group">
               <label class="field-label" for="gallery-date">Photo Date</label>
               <input
                 id="gallery-date"
@@ -129,13 +117,12 @@
               id="gallery-caption"
               class="field-input field-textarea"
               name="caption"
-              placeholder="Write a short caption for this photo"
+              placeholder="Optional short caption for this photo"
               rows="5"
               maxlength="280"
-              required
             ></textarea>
             <p class="helper-copy">
-              Titles are optional. A short caption is enough for gallery cards.
+              Caption is optional.
             </p>
           </div>
 
@@ -149,7 +136,7 @@
               accept="image/*"
             />
             <p id="replace-image-note" class="helper-copy">
-              Choose an image file to upload to Firebase Storage.
+              Choose an image file to upload.
             </p>
             <p id="selected-image-name" class="helper-copy helper-copy-strong">
               No image selected yet.
@@ -164,7 +151,7 @@
               </div>
             </div>
             <p id="preview-meta" class="gallery-preview-meta">
-              Firebase Storage preview ready for the next upload.
+              Image preview ready for the next upload.
             </p>
           </div>
 
@@ -190,7 +177,7 @@
           </div>
 
           <p id="list-feedback" class="list-feedback" role="status" aria-live="polite">
-            Connecting to Firebase...
+            Loading gallery items...
           </p>
         </div>
 

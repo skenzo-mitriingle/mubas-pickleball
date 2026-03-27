@@ -5,6 +5,7 @@ import {
 import {
   addDoc,
   collection,
+  deleteField,
   deleteDoc,
   doc,
   getDocs,
@@ -26,7 +27,6 @@ const syncLabel = document.getElementById("sync-label");
 const editingChip = document.getElementById("editing-chip");
 const formHeading = document.getElementById("form-heading");
 const announcementForm = document.getElementById("announcement-form");
-const titleInput = document.getElementById("announcement-title");
 const dateInput = document.getElementById("announcement-date");
 const excerptInput = document.getElementById("announcement-excerpt");
 const saveButton = document.getElementById("save-button");
@@ -60,7 +60,7 @@ function setFieldError(input, hasError) {
 }
 
 function clearFieldErrors() {
-  [titleInput, dateInput, excerptInput].forEach((input) => {
+  [dateInput, excerptInput].forEach((input) => {
     setFieldError(input, false);
   });
 }
@@ -97,7 +97,6 @@ function cacheAnnouncements(items) {
   try {
     const cachePayload = items.map((item) => ({
       id: item.id || "",
-      title: item.title || "",
       date: item.date || "",
       excerpt: item.excerpt || "",
       createdAtMs: getTimestampMilliseconds(item.createdAt),
@@ -229,7 +228,6 @@ function setSubmittingState(isBusy) {
 
 function getAnnouncementValues() {
   return {
-    title: titleInput.value.trim(),
     date: dateInput.value,
     excerpt: excerptInput.value.trim()
   };
@@ -237,13 +235,6 @@ function getAnnouncementValues() {
 
 function validateAnnouncement(values) {
   clearFieldErrors();
-
-  if (!values.title) {
-    setFieldError(titleInput, true);
-    setFeedback(formFeedback, "Enter an announcement title.", "error");
-    titleInput.focus();
-    return false;
-  }
 
   if (!values.date) {
     setFieldError(dateInput, true);
@@ -327,10 +318,6 @@ function renderAnnouncements(items) {
     actions.append(editButton, deleteButton);
     topLine.append(date, actions);
 
-    const title = document.createElement("h3");
-    title.className = "item-title";
-    title.textContent = item.title;
-
     const excerpt = document.createElement("p");
     excerpt.className = "item-excerpt";
     excerpt.textContent = item.excerpt;
@@ -339,7 +326,7 @@ function renderAnnouncements(items) {
     meta.className = "item-meta";
     meta.textContent = `Saved ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 
-    card.append(topLine, title, excerpt, meta);
+    card.append(topLine, excerpt, meta);
     announcementsList.appendChild(card);
   });
 }
@@ -405,7 +392,6 @@ function beginEditingAnnouncement(announcementId) {
   }
 
   editingAnnouncementId = announcementId;
-  titleInput.value = item.title || "";
   dateInput.value = item.date || "";
   excerptInput.value = item.excerpt || "";
 
@@ -413,7 +399,7 @@ function beginEditingAnnouncement(announcementId) {
   updateFormMode();
   renderAnnouncements(currentAnnouncements);
   setFeedback(formFeedback, "Editing announcement. Update the fields and save.", "info");
-  titleInput.focus();
+  excerptInput.focus();
 }
 
 async function removeAnnouncement(announcementId, button) {
@@ -424,7 +410,7 @@ async function removeAnnouncement(announcementId, button) {
     return;
   }
 
-  const confirmed = window.confirm(`Delete "${item.title}"?`);
+  const confirmed = window.confirm(`Delete "${item.excerpt || "this announcement"}"?`);
 
   if (!confirmed) {
     return;
@@ -495,7 +481,7 @@ async function handleFormSubmit(event) {
     if (editingAnnouncementId) {
       await withTimeout(
         updateDoc(doc(db, ANNOUNCEMENTS_COLLECTION, editingAnnouncementId), {
-          title: values.title,
+          title: deleteField(),
           date: values.date,
           excerpt: values.excerpt,
           updatedAt: timestamp
@@ -508,7 +494,6 @@ async function handleFormSubmit(event) {
     } else {
       await withTimeout(
         addDoc(collection(db, ANNOUNCEMENTS_COLLECTION), {
-          title: values.title,
           date: values.date,
           excerpt: values.excerpt,
           createdAt: timestamp,
