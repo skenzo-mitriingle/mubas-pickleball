@@ -54,7 +54,7 @@
         <h2 class="section-title">Upload photos to Firebase Storage and manage the image archive in Firestore.</h2>
         <p class="section-copy">
           This page is the admin workspace for the club gallery. Upload a new image,
-          add a title and caption, and keep the public gallery fresh with edits and deletions.
+          add an optional short title and caption, and keep the public gallery fresh with edits and deletions.
         </p>
 
         <div class="metric-row">
@@ -100,15 +100,14 @@
         <form id="gallery-form" class="announcement-form" novalidate>
           <div class="field-grid">
             <div class="field-group">
-              <label class="field-label" for="gallery-title">Title</label>
+              <label class="field-label" for="gallery-title">Title (Optional)</label>
               <input
                 id="gallery-title"
                 class="field-input"
                 name="title"
                 type="text"
-                placeholder="Enter gallery title"
-                maxlength="120"
-                required
+                placeholder="Optional short title"
+                maxlength="70"
               />
             </div>
 
@@ -135,6 +134,9 @@
               maxlength="280"
               required
             ></textarea>
+            <p class="helper-copy">
+              Titles are optional. A short caption is enough for gallery cards.
+            </p>
           </div>
 
           <div class="field-group">

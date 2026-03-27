@@ -54,7 +54,7 @@
         <h2 class="section-title">Create video highlights, save them to Firestore, and manage the full archive.</h2>
         <p class="section-copy">
           This page is the admin workspace for club videos. Add a YouTube, Vimeo,
-          or direct video link, describe the clip, and keep the public video section fresh.
+          or direct video link, use an optional short title, describe the clip, and keep the public video section fresh.
         </p>
 
         <div class="metric-row">
@@ -79,7 +79,7 @@
         <p class="panel-kicker">Helpful Notes</p>
         <h2 class="section-title">What makes a strong video update?</h2>
         <ul class="note-list">
-          <li>Use a clear title so visitors understand the clip before pressing play.</li>
+          <li>Use a short optional title only when it adds value beyond the description.</li>
           <li>Add short descriptions that explain whether the video is a recap, drill, or highlight.</li>
           <li>Use YouTube, Vimeo, or direct video links so the player stays reliable across the site.</li>
         </ul>
@@ -100,15 +100,14 @@
         <form id="video-form" class="announcement-form" novalidate>
           <div class="field-grid">
             <div class="field-group">
-              <label class="field-label" for="video-title">Title</label>
+              <label class="field-label" for="video-title">Title (Optional)</label>
               <input
                 id="video-title"
                 class="field-input"
                 name="title"
                 type="text"
-                placeholder="Enter video title"
-                maxlength="120"
-                required
+                placeholder="Optional short title"
+                maxlength="70"
               />
             </div>
 
@@ -151,6 +150,9 @@
               maxlength="320"
               required
             ></textarea>
+            <p class="helper-copy">
+              Titles are optional. A short description is enough for video cards.
+            </p>
           </div>
 
           <div class="video-preview-card">

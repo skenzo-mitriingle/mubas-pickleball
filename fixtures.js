@@ -468,23 +468,23 @@ async function loadFixtures() {
 
   if (cachedFixtures.length) {
     renderFixtureArchive(cachedFixtures);
-    setArchiveStatus("Showing a saved browser copy while Firebase connects.");
+    setArchiveStatus("Showing saved updates while loading.");
   } else {
     renderFeaturedFixture();
     updateFixtureStats([], [], []);
     renderFixtureEmptyState(
       "fixtures-upcoming-grid",
       "Loading fixtures...",
-      "Fetching the latest upcoming matches from Firebase.",
+      "Fetching the latest upcoming matches.",
       "Live Fixtures"
     );
     renderFixtureEmptyState(
       "fixtures-completed-grid",
       "Loading results...",
-      "Fetching the latest completed results from Firebase.",
+      "Fetching the latest completed results.",
       "Live Results"
     );
-    setArchiveStatus("Connecting to Firebase...");
+    setArchiveStatus("Loading latest updates...");
   }
 
   try {
@@ -503,7 +503,7 @@ async function loadFixtures() {
 
     cacheFixtures(fixtures);
     renderFixtureArchive(fixtures);
-    setArchiveStatus("Live fixtures from Firebase.", "success");
+    setArchiveStatus("Latest fixture updates", "success");
   } catch (error) {
     console.error("Fixture archive load failed:", error);
 

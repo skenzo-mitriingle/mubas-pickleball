@@ -304,12 +304,12 @@ function renderFeaturedVideo(item) {
 
   const action = getVideoAction(item);
   const featuredMedia = createVideoMediaElement(item, {
-    title: item.title || "Featured club video"
+    title: item.title || item.description || "Featured club video"
   });
 
   featuredPlayer.replaceChildren(featuredMedia);
   featuredDate.textContent = formatVideoDate(item.date, item.createdAt);
-  featuredTitle.textContent = item.title || "Untitled video";
+  featuredTitle.textContent = item.title || "Latest video highlight";
   featuredDescription.textContent = item.description || "More details for this club video will be shared soon.";
   featuredMeta.textContent = `Last updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
   featuredLink.hidden = !action.href;
@@ -373,7 +373,7 @@ function renderVideoArchive(items) {
     card.className = "glass-card video-archive-card";
 
     const media = createVideoMediaElement(item, {
-      title: item.title || "Club video"
+      title: item.title || item.description || "Club video"
     });
 
     const copy = document.createElement("div");
@@ -394,10 +394,6 @@ function renderVideoArchive(items) {
 
     head.append(chip, date);
 
-    const title = document.createElement("h3");
-    title.className = "video-archive-title";
-    title.textContent = item.title || "Untitled video";
-
     const description = document.createElement("p");
     description.className = "video-archive-text";
     description.textContent = item.description || "More details for this club video will be shared soon.";
@@ -406,7 +402,16 @@ function renderVideoArchive(items) {
     meta.className = "video-archive-meta";
     meta.textContent = `Updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 
-    copy.append(head, title, description, meta);
+    copy.appendChild(head);
+
+    if (item.title) {
+      const title = document.createElement("h3");
+      title.className = "video-archive-title";
+      title.textContent = item.title;
+      copy.appendChild(title);
+    }
+
+    copy.append(description, meta);
 
     if (action.href) {
       const actions = document.createElement("div");
@@ -432,16 +437,16 @@ async function loadVideos() {
 
   if (cachedVideos.length) {
     renderVideoArchive(cachedVideos);
-    setArchiveStatus("Showing a saved browser copy while Firebase connects.");
+    setArchiveStatus("Showing saved updates while loading.");
   } else {
     renderFeaturedVideo();
     updateVideoStats([]);
     renderArchiveState(
       "Loading videos...",
-      "Fetching the latest club highlights from Firebase.",
+      "Fetching the latest club highlights.",
       "Live Videos"
     );
-    setArchiveStatus("Connecting to Firebase...");
+    setArchiveStatus("Loading latest updates...");
   }
 
   try {
@@ -460,7 +465,7 @@ async function loadVideos() {
 
     cacheVideos(videos);
     renderVideoArchive(videos);
-    setArchiveStatus("Live videos from Firebase.", "success");
+    setArchiveStatus("Latest video updates", "success");
   } catch (error) {
     console.error("Video archive load failed:", error);
 

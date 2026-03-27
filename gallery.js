@@ -11,15 +11,10 @@ const GALLERY_CACHE_KEY = "mubas-pickleball:gallery-cache";
 const featuredGalleryTrigger = document.getElementById("featured-gallery-trigger");
 const galleryLightbox = document.getElementById("gallery-lightbox");
 const galleryLightboxClose = document.getElementById("gallery-lightbox-close");
-const galleryLightboxDismiss = document.getElementById("gallery-lightbox-dismiss");
 const galleryLightboxPrev = document.getElementById("gallery-lightbox-prev");
 const galleryLightboxNext = document.getElementById("gallery-lightbox-next");
 const galleryLightboxSave = document.getElementById("gallery-lightbox-save");
 const galleryLightboxImage = document.getElementById("gallery-lightbox-image");
-const galleryLightboxDate = document.getElementById("gallery-lightbox-date");
-const galleryLightboxTitle = document.getElementById("gallery-lightbox-title");
-const galleryLightboxCaption = document.getElementById("gallery-lightbox-caption");
-const galleryLightboxMeta = document.getElementById("gallery-lightbox-meta");
 
 let featuredGalleryItem = null;
 let activeLightboxItem = null;
@@ -346,14 +341,14 @@ function updateGalleryLightboxNavigationState() {
   if (galleryLightboxPrev && previousItem) {
     galleryLightboxPrev.setAttribute(
       "aria-label",
-      `Show previous image: ${previousItem.title || "Gallery image"}`
+      `Show previous image: ${previousItem.title || previousItem.caption || "Gallery image"}`
     );
   }
 
   if (galleryLightboxNext && nextItem) {
     galleryLightboxNext.setAttribute(
       "aria-label",
-      `Show next image: ${nextItem.title || "Gallery image"}`
+      `Show next image: ${nextItem.title || nextItem.caption || "Gallery image"}`
     );
   }
 }
@@ -369,7 +364,7 @@ function setFeaturedTriggerState(item) {
   featuredGalleryTrigger.setAttribute(
     "aria-label",
     featuredGalleryItem
-      ? `Open full image: ${featuredGalleryItem.title || "Featured gallery image"}`
+      ? `Open full image: ${featuredGalleryItem.title || featuredGalleryItem.caption || "Featured gallery image"}`
       : "Open featured gallery image"
   );
 }
@@ -379,22 +374,14 @@ function renderGalleryLightboxItem(item) {
     !item ||
     !item.imageUrl ||
     !galleryLightbox ||
-    !galleryLightboxImage ||
-    !galleryLightboxDate ||
-    !galleryLightboxTitle ||
-    !galleryLightboxCaption ||
-    !galleryLightboxMeta
+    !galleryLightboxImage
   ) {
     return;
   }
 
   activeLightboxItem = item;
   galleryLightboxImage.src = item.imageUrl;
-  galleryLightboxImage.alt = item.title || "Full gallery image";
-  galleryLightboxDate.textContent = formatGalleryDate(item.date, item.createdAt);
-  galleryLightboxTitle.textContent = item.title || "Untitled gallery image";
-  galleryLightboxCaption.textContent = item.caption || "More details for this club moment will be shared soon.";
-  galleryLightboxMeta.textContent = `Updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
+  galleryLightboxImage.alt = item.title || item.caption || "Full gallery image";
   updateGalleryLightboxNavigationState();
 }
 
@@ -491,7 +478,6 @@ function setupGalleryLightbox() {
   });
 
   galleryLightboxClose?.addEventListener("click", closeGalleryLightbox);
-  galleryLightboxDismiss?.addEventListener("click", closeGalleryLightbox);
   galleryLightboxPrev?.addEventListener("click", () => {
     stepGalleryLightbox(-1);
   });
@@ -566,11 +552,11 @@ function renderFeaturedGalleryItem(item) {
 
   setFeaturedTriggerState(item);
   featuredImage.src = item.imageUrl;
-  featuredImage.alt = item.title || "Featured gallery image";
+  featuredImage.alt = item.title || item.caption || "Featured gallery image";
   featuredImage.hidden = false;
   featuredEmpty.hidden = true;
   featuredDate.textContent = formatGalleryDate(item.date, item.createdAt);
-  featuredTitle.textContent = item.title || "Untitled gallery item";
+  featuredTitle.textContent = item.title || "Club gallery image";
   featuredCaption.textContent = item.caption || "More context for this gallery image will be shared soon.";
   featuredMeta.textContent = `Last updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 }
@@ -638,12 +624,12 @@ function renderGalleryArchive(items) {
     mediaButton.type = "button";
     mediaButton.setAttribute(
       "aria-label",
-      `Open full image: ${item.title || "Gallery image"}`
+      `Open full image: ${item.title || item.caption || "Gallery image"}`
     );
 
     const image = document.createElement("img");
     image.src = item.imageUrl;
-    image.alt = item.title || "Gallery image";
+    image.alt = item.title || item.caption || "Gallery image";
     image.loading = "lazy";
 
     const overlay = document.createElement("span");
@@ -666,20 +652,7 @@ function renderGalleryArchive(items) {
     const date = document.createElement("p");
     date.className = "card-date";
     date.textContent = formatGalleryDate(item.date, item.createdAt);
-
-    const title = document.createElement("h3");
-    title.className = "gallery-archive-title";
-    title.textContent = item.title || "Untitled gallery item";
-
-    const caption = document.createElement("p");
-    caption.className = "gallery-archive-text";
-    caption.textContent = item.caption || "More details for this club moment will be shared soon.";
-
-    const meta = document.createElement("p");
-    meta.className = "gallery-archive-meta";
-    meta.textContent = `Updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
-
-    copy.append(date, title, caption, meta);
+    copy.appendChild(date);
     card.append(media, copy);
     container.appendChild(card);
   });
@@ -707,16 +680,16 @@ async function loadGallery() {
 
   if (cachedItems.length) {
     renderGalleryArchive(cachedItems);
-    setGalleryStatus("Showing a saved browser copy while Firebase connects.");
+    setGalleryStatus("Showing saved updates while loading.");
   } else {
     renderFeaturedGalleryItem();
     updateGalleryStats([]);
     renderGalleryState(
       "Loading gallery...",
-      "Fetching the latest club photos from Firebase.",
+      "Fetching the latest club photos.",
       "Live Gallery"
     );
-    setGalleryStatus("Connecting to Firebase...");
+    setGalleryStatus("Loading latest updates...");
   }
 
   try {
@@ -735,7 +708,7 @@ async function loadGallery() {
 
     cacheGalleryItems(galleryItems);
     renderGalleryArchive(galleryItems);
-    setGalleryStatus("Live gallery from Firebase.", "success");
+    setGalleryStatus("Latest gallery updates", "success");
   } catch (error) {
     console.error("Gallery load failed:", error);
 

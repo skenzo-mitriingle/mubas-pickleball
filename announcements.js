@@ -363,16 +363,16 @@ async function loadAnnouncements() {
 
   if (cachedAnnouncements.length) {
     renderAnnouncementsArchive(cachedAnnouncements);
-    setArchiveStatus("Showing a saved browser copy while Firebase connects.");
+    setArchiveStatus("Showing saved updates while loading.");
   } else {
     renderFeaturedAnnouncement();
     updateArchiveStats([]);
     renderArchiveState(
       "Loading announcements...",
-      "Fetching the latest club updates from Firebase.",
+      "Fetching the latest club updates.",
       "Live Updates"
     );
-    setArchiveStatus("Connecting to Firebase...");
+    setArchiveStatus("Loading latest updates...");
   }
 
   try {
@@ -391,7 +391,7 @@ async function loadAnnouncements() {
 
     cacheAnnouncements(announcements);
     renderAnnouncementsArchive(announcements);
-    setArchiveStatus("Live announcements from Firebase.", "success");
+    setArchiveStatus("Latest announcements", "success");
   } catch (error) {
     console.error("Archive announcement load failed:", error);
 

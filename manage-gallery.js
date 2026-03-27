@@ -382,13 +382,6 @@ function getGalleryValues() {
 function validateGallery(values, imageFile) {
   clearFieldErrors();
 
-  if (!values.title) {
-    setFieldError(titleInput, true);
-    setFeedback(formFeedback, "Enter a gallery title.", "error");
-    titleInput.focus();
-    return false;
-  }
-
   if (!values.date) {
     setFieldError(dateInput, true);
     setFeedback(formFeedback, "Choose the photo date.", "error");
@@ -476,7 +469,7 @@ function renderGalleryItems(items) {
     const image = document.createElement("img");
     image.className = "gallery-item-image";
     image.src = item.imageUrl || "";
-    image.alt = item.title || "Gallery image";
+    image.alt = item.title || item.caption || "Gallery image";
     image.loading = "lazy";
 
     media.appendChild(image);
@@ -513,7 +506,7 @@ function renderGalleryItems(items) {
 
     const title = document.createElement("h3");
     title.className = "gallery-item-title";
-    title.textContent = item.title || "Untitled gallery item";
+    title.textContent = item.title || "";
 
     const caption = document.createElement("p");
     caption.className = "gallery-item-caption";
@@ -523,7 +516,13 @@ function renderGalleryItems(items) {
     meta.className = "gallery-item-meta";
     meta.textContent = `Saved ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 
-    copy.append(head, title, caption, meta);
+    copy.append(head);
+
+    if (item.title) {
+      copy.appendChild(title);
+    }
+
+    copy.append(caption, meta);
     layout.append(media, copy);
     card.appendChild(layout);
     galleryList.appendChild(card);
@@ -601,7 +600,7 @@ function beginEditingGalleryItem(galleryId) {
   updatePreviewFromState();
   renderGalleryItems(currentGalleryItems);
   setFeedback(formFeedback, "Editing gallery item. Update the fields and save.", "info");
-  titleInput.focus();
+  captionInput.focus();
 }
 
 function sanitizeFileName(fileName) {
@@ -659,7 +658,7 @@ async function removeGalleryItem(galleryId, button) {
     return;
   }
 
-  const confirmed = window.confirm(`Delete "${item.title}" from the gallery?`);
+  const confirmed = window.confirm(`Delete "${item.title || item.caption || "this gallery image"}" from the gallery?`);
 
   if (!confirmed) {
     return;

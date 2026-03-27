@@ -22,15 +22,10 @@ const FIXTURES_CACHE_KEY = "mubas-pickleball:fixtures-cache";
 const HOME_TEAM_NAME = "Mubas Pickleball";
 const homeGalleryLightbox = document.getElementById("home-gallery-lightbox");
 const homeGalleryLightboxClose = document.getElementById("home-gallery-lightbox-close");
-const homeGalleryLightboxDismiss = document.getElementById("home-gallery-lightbox-dismiss");
 const homeGalleryLightboxPrev = document.getElementById("home-gallery-lightbox-prev");
 const homeGalleryLightboxNext = document.getElementById("home-gallery-lightbox-next");
 const homeGalleryLightboxSave = document.getElementById("home-gallery-lightbox-save");
 const homeGalleryLightboxImage = document.getElementById("home-gallery-lightbox-image");
-const homeGalleryLightboxDate = document.getElementById("home-gallery-lightbox-date");
-const homeGalleryLightboxTitle = document.getElementById("home-gallery-lightbox-title");
-const homeGalleryLightboxCaption = document.getElementById("home-gallery-lightbox-caption");
-const homeGalleryLightboxMeta = document.getElementById("home-gallery-lightbox-meta");
 
 let activeHomeGalleryItem = null;
 let lastHomeGalleryFocus = null;
@@ -897,14 +892,14 @@ function updateHomeGalleryNavigationState() {
   if (homeGalleryLightboxPrev && previousItem) {
     homeGalleryLightboxPrev.setAttribute(
       "aria-label",
-      `Show previous image: ${previousItem.title || "Gallery image"}`
+      `Show previous image: ${previousItem.title || previousItem.caption || "Gallery image"}`
     );
   }
 
   if (homeGalleryLightboxNext && nextItem) {
     homeGalleryLightboxNext.setAttribute(
       "aria-label",
-      `Show next image: ${nextItem.title || "Gallery image"}`
+      `Show next image: ${nextItem.title || nextItem.caption || "Gallery image"}`
     );
   }
 }
@@ -914,22 +909,14 @@ function renderHomeGalleryLightboxItem(item) {
     !item ||
     !item.imageUrl ||
     !homeGalleryLightbox ||
-    !homeGalleryLightboxImage ||
-    !homeGalleryLightboxDate ||
-    !homeGalleryLightboxTitle ||
-    !homeGalleryLightboxCaption ||
-    !homeGalleryLightboxMeta
+    !homeGalleryLightboxImage
   ) {
     return;
   }
 
   activeHomeGalleryItem = item;
   homeGalleryLightboxImage.src = item.imageUrl;
-  homeGalleryLightboxImage.alt = item.title || "Full gallery image";
-  homeGalleryLightboxDate.textContent = formatGalleryDate(item.date, item.createdAt);
-  homeGalleryLightboxTitle.textContent = item.title || "Untitled gallery image";
-  homeGalleryLightboxCaption.textContent = item.caption || "More details for this club moment will be shared soon.";
-  homeGalleryLightboxMeta.textContent = `Updated ${formatTimestamp(item.updatedAt || item.createdAt)}`;
+  homeGalleryLightboxImage.alt = item.title || item.caption || "Full gallery image";
   updateHomeGalleryNavigationState();
 }
 
@@ -1026,7 +1013,6 @@ function setupHomeGalleryLightbox() {
     stepHomeGalleryLightbox(1);
   });
   homeGalleryLightboxClose?.addEventListener("click", closeHomeGalleryLightbox);
-  homeGalleryLightboxDismiss?.addEventListener("click", closeHomeGalleryLightbox);
   homeGalleryLightboxSave?.addEventListener("click", saveActiveHomeGalleryImage);
 
   homeGalleryLightbox.addEventListener("click", (event) => {
@@ -1137,13 +1123,13 @@ async function loadAnnouncements() {
 
   if (cachedAnnouncements.length) {
     renderAnnouncements(cachedAnnouncements);
-    setAnnouncementsStatus("Showing a saved browser copy while Firebase connects.");
+    setAnnouncementsStatus("Showing saved updates while loading.");
   } else {
     renderAnnouncementState(
       "Loading announcements...",
-      "Fetching the latest club updates from Firebase."
+      "Fetching the latest club updates."
     );
-    setAnnouncementsStatus("Connecting to Firebase...");
+    setAnnouncementsStatus("Loading latest updates...");
   }
 
   try {
@@ -1162,7 +1148,7 @@ async function loadAnnouncements() {
 
     cacheAnnouncements(announcements);
     renderAnnouncements(announcements);
-    setAnnouncementsStatus("Live announcements from Firebase.", "success");
+    setAnnouncementsStatus("Latest announcements", "success");
   } catch (error) {
     console.error("Announcement load failed:", error);
 
@@ -1250,7 +1236,7 @@ function renderGallery(items) {
     card.setAttribute("role", "button");
     card.setAttribute(
       "aria-label",
-      `Open full image: ${item.title || "Gallery image"}`
+      `Open full image: ${item.title || item.caption || "Gallery image"}`
     );
     card.addEventListener("click", () => {
       openHomeGalleryLightbox(item);
@@ -1267,7 +1253,7 @@ function renderGallery(items) {
 
     const image = document.createElement("img");
     image.src = item.imageUrl;
-    image.alt = item.title || "Gallery image";
+    image.alt = item.title || item.caption || "Gallery image";
     image.className = "gallery-image";
     image.loading = "lazy";
 
@@ -1287,15 +1273,7 @@ function renderGallery(items) {
     const date = document.createElement("p");
     date.className = "card-date";
     date.textContent = formatGalleryDate(item.date, item.createdAt);
-
-    const heading = document.createElement("h3");
-    heading.textContent = item.title || "Untitled gallery image";
-
-    const text = document.createElement("p");
-    text.className = "card-text";
-    text.textContent = item.caption || "More details for this club moment will be shared soon.";
-
-    caption.append(date, heading, text);
+    caption.appendChild(date);
     card.append(media, caption);
     container.appendChild(card);
   });
@@ -1329,13 +1307,13 @@ async function loadGallery() {
 
   if (cachedGalleryItems.length) {
     renderGallery(cachedGalleryItems);
-    setGalleryStatus("Showing a saved browser copy while Firebase connects.");
+    setGalleryStatus("Showing saved updates while loading.");
   } else {
     renderGalleryState(
       "Loading gallery...",
-      "Fetching the latest club photos from Firebase."
+      "Fetching the latest club photos."
     );
-    setGalleryStatus("Connecting to Firebase...");
+    setGalleryStatus("Loading latest updates...");
   }
 
   try {
@@ -1354,7 +1332,7 @@ async function loadGallery() {
 
     cacheGalleryItems(galleryItems);
     renderGallery(galleryItems);
-    setGalleryStatus("Live gallery from Firebase.", "success");
+    setGalleryStatus("Latest gallery updates", "success");
   } catch (error) {
     console.error("Gallery load failed:", error);
 
@@ -1456,15 +1434,20 @@ function renderVideos(items) {
 
     head.append(chip, date);
 
-    const title = document.createElement("h3");
-    title.className = "card-title";
-    title.textContent = item.title || "Untitled video";
-
     const description = document.createElement("p");
     description.className = "card-text";
     description.textContent = item.description || "More details for this club video will be shared soon.";
 
-    copy.append(head, title, description);
+    copy.appendChild(head);
+
+    if (item.title) {
+      const title = document.createElement("h3");
+      title.className = "card-title";
+      title.textContent = item.title;
+      copy.appendChild(title);
+    }
+
+    copy.appendChild(description);
 
     if (action.href) {
       const actions = document.createElement("div");
@@ -1496,13 +1479,13 @@ async function loadVideos() {
 
   if (cachedVideos.length) {
     renderVideos(cachedVideos);
-    setVideosStatus("Showing a saved browser copy while Firebase connects.");
+    setVideosStatus("Showing saved updates while loading.");
   } else {
     renderVideoState(
       "Loading videos...",
-      "Fetching the latest club highlights from Firebase."
+      "Fetching the latest club highlights."
     );
-    setVideosStatus("Connecting to Firebase...");
+    setVideosStatus("Loading latest updates...");
   }
 
   try {
@@ -1521,7 +1504,7 @@ async function loadVideos() {
 
     cacheVideos(videos);
     renderVideos(videos);
-    setVideosStatus("Live videos from Firebase.", "success");
+    setVideosStatus("Latest video updates", "success");
   } catch (error) {
     console.error("Video load failed:", error);
 
@@ -1655,13 +1638,13 @@ async function loadFixtures() {
 
   if (cachedFixtures.length) {
     renderFixtures(cachedFixtures);
-    setFixturesStatus("Showing a saved browser copy while Firebase connects.");
+    setFixturesStatus("Showing saved updates while loading.");
   } else {
     renderFixtureState(
       "Loading fixtures...",
-      "Fetching the latest match schedule and results from Firebase."
+      "Fetching the latest match schedule and results."
     );
-    setFixturesStatus("Connecting to Firebase...");
+    setFixturesStatus("Loading latest updates...");
   }
 
   try {
@@ -1680,7 +1663,7 @@ async function loadFixtures() {
 
     cacheFixtures(fixtures);
     renderFixtures(fixtures);
-    setFixturesStatus("Live fixtures from Firebase.", "success");
+    setFixturesStatus("Latest fixture updates", "success");
   } catch (error) {
     console.error("Fixture load failed:", error);
 

@@ -350,13 +350,6 @@ function getVideoValues() {
 function validateVideo(values) {
   clearFieldErrors();
 
-  if (!values.title) {
-    setFieldError(titleInput, true);
-    setFeedback(formFeedback, "Enter a video title.", "error");
-    titleInput.focus();
-    return null;
-  }
-
   if (!values.date) {
     setFieldError(dateInput, true);
     setFeedback(formFeedback, "Choose the video date.", "error");
@@ -471,10 +464,6 @@ function renderVideos(items) {
     provider.className = "video-item-provider";
     provider.textContent = getVideoProviderLabel(item.provider);
 
-    const title = document.createElement("h3");
-    title.className = "item-title";
-    title.textContent = item.title || "Untitled video";
-
     const description = document.createElement("p");
     description.className = "video-item-description";
     description.textContent = item.description || "More details for this club video will be shared soon.";
@@ -483,7 +472,16 @@ function renderVideos(items) {
     meta.className = "item-meta";
     meta.textContent = `Saved ${formatTimestamp(item.updatedAt || item.createdAt)}`;
 
-    copy.append(topLine, provider, title, description, meta);
+    copy.append(topLine, provider);
+
+    if (item.title) {
+      const title = document.createElement("h3");
+      title.className = "item-title";
+      title.textContent = item.title;
+      copy.appendChild(title);
+    }
+
+    copy.append(description, meta);
 
     if (action.href) {
       const actionRow = document.createElement("div");
@@ -588,7 +586,7 @@ function beginEditingVideo(videoId) {
   updateVideoPreview();
   renderVideos(currentVideos);
   setFeedback(formFeedback, "Editing video. Update the fields and save.", "info");
-  titleInput.focus();
+  descriptionInput.focus();
 }
 
 async function removeVideo(videoId, button) {
@@ -599,7 +597,7 @@ async function removeVideo(videoId, button) {
     return;
   }
 
-  const confirmed = window.confirm(`Delete "${item.title}"?`);
+  const confirmed = window.confirm(`Delete "${item.title || item.description || "this video"}"?`);
 
   if (!confirmed) {
     return;
