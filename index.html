@@ -32,10 +32,10 @@
         >
           <a href="#home" class="nav-link">Home</a>
           <a href="#about" class="nav-link">About</a>
-          <a href="#gallery" class="nav-link">Gallery</a>
-          <a href="#videos" class="nav-link">Videos</a>
           <a href="#announcements" class="nav-link">Announcements</a>
           <a href="#fixtures" class="nav-link">Fixtures</a>
+          <a href="#gallery" class="nav-link">Gallery</a>
+          <a href="#videos" class="nav-link">Videos</a>
           <a href="#contact" class="nav-link">Contact</a>
           <a href="admin-login.html" class="btn btn-secondary nav-button">
             Admin Login
@@ -84,11 +84,7 @@
               <h1 class="hero-title">
                 Mubas <span class="hero-title-accent">Pickleball</span> Club
               </h1>
-              <p class="hero-description">
-                A modern digital home for club updates, photo moments, video
-                highlights, fixtures, and the energy that defines our court
-                culture.
-              </p>
+              
             </div>
 
             <div class="hero-actions">
@@ -110,9 +106,12 @@
           <div class="section-header">
             <div class="section-heading">
               <p class="section-kicker">About the Club</p>
-              <h2 class="section-title">
-                Our vision, values, team, and pathways
-              </h2>
+              <h2 class="section-title">Our mission, vision, and values</h2>
+              <p class="section-description">
+                Student-led and purpose-driven, the club uses pickleball to
+                grow leadership, enterprise, wellness, and belonging across the
+                MUBAS community.
+              </p>
             </div>
           </div>
 
@@ -230,6 +229,152 @@
               </article>
             </div>
           </article>
+        </div>
+      </section>
+
+      <section id="announcements" class="content-section">
+        <div
+          class="section-background announcements-background"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="section-shade section-shade-strong"
+          aria-hidden="true"
+        ></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Announcements</p>
+              <h2 class="section-title">Latest club updates</h2>
+              <p
+                id="announcements-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Loading latest updates...
+              </p>
+            </div>
+            <a href="announcements.html" class="btn btn-secondary section-button">
+              View All Announcements
+            </a>
+          </div>
+          <div
+            id="announcements-list"
+            class="content-grid announcements-grid"
+          ></div>
+        </div>
+      </section>
+
+      <section id="fixtures" class="content-section">
+        <div
+          class="section-background fixtures-background"
+          aria-hidden="true"
+        ></div>
+        <div
+          class="section-shade section-shade-medium"
+          aria-hidden="true"
+        ></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Fixtures & Results</p>
+              <h2 class="section-title">Upcoming matches</h2>
+              <p
+                id="fixtures-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Loading latest updates...
+              </p>
+            </div>
+            <a href="fixtures.html" class="btn btn-secondary section-button">
+              View All Fixtures
+            </a>
+          </div>
+          <div id="fixtures-list" class="content-grid fixtures-grid"></div>
+        </div>
+      </section>
+
+      <section id="gallery" class="content-section">
+        <div
+          class="section-background gallery-background"
+          aria-hidden="true"
+        ></div>
+        <div class="section-shade section-shade-soft" aria-hidden="true"></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Gallery</p>
+              <h2 class="section-title">Memories from the court</h2>
+              <p
+                id="gallery-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Loading latest updates...
+              </p>
+            </div>
+            <a href="gallery.html" class="btn btn-secondary section-button">
+              View Full Gallery
+            </a>
+          </div>
+          <div id="gallery-grid" class="content-grid gallery-grid"></div>
+        </div>
+      </section>
+
+      <section id="videos" class="content-section">
+        <video
+          class="section-background-media videos-background-media"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src="assets/videos/VID-20260312-WA0035_001.mp4" type="video/mp4" />
+        </video>
+        <div
+          class="section-shade section-shade-strong"
+          aria-hidden="true"
+        ></div>
+        <div class="container section-inner">
+          <div class="section-header">
+            <div class="section-heading">
+              <p class="section-kicker">Video Highlights</p>
+              <h2 class="section-title">Watch the latest action</h2>
+              <p
+                id="videos-status"
+                class="section-status"
+                role="status"
+                aria-live="polite"
+              >
+                Loading latest updates...
+              </p>
+            </div>
+            <a href="videos.html" class="btn btn-secondary section-button">
+              View All Videos
+            </a>
+          </div>
+          <div id="video-list" class="content-grid video-grid"></div>
+        </div>
+      </section>
+
+      <section class="content-section presentation-section">
+        <div class="container section-inner">
+          <div class="section-header presentation-header">
+            <div class="section-heading">
+              <p class="section-kicker">Club Leadership</p>
+              <h2 class="section-title">Meet the team and find your place</h2>
+              <p class="section-description">
+                Meet the executive team leading club growth, training,
+                partnerships, wellness, and student engagement.
+              </p>
+            </div>
+          </div>
 
           <article class="team-panel">
             <div class="team-panel-rail" aria-hidden="true">
@@ -383,8 +528,23 @@
               </div>
             </div>
           </article>
+        </div>
+      </section>
 
-          <article id="contact" class="connect-panel">
+      <section id="contact" class="content-section contact-showcase-section">
+        <div class="container section-inner">
+          <div class="section-header presentation-header">
+            <div class="section-heading">
+              <p class="section-kicker">Contact</p>
+              <h2 class="section-title">Connect with the club leadership</h2>
+              <p class="section-description">
+                Reach the club leadership for partnerships, membership
+                questions, event support, and general club inquiries.
+              </p>
+            </div>
+          </div>
+
+          <article class="connect-panel">
             <div class="connect-panel-media">
               <div class="connect-panel-photo-wrap">
                 <img
@@ -446,137 +606,6 @@
               </div>
             </div>
           </article>
-        </div>
-      </section>
-
-      <section id="announcements" class="content-section">
-        <div
-          class="section-background announcements-background"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="section-shade section-shade-strong"
-          aria-hidden="true"
-        ></div>
-        <div class="container section-inner">
-          <div class="section-header">
-            <div class="section-heading">
-              <p class="section-kicker">Announcements</p>
-              <h2 class="section-title">Latest club updates</h2>
-              <p
-                id="announcements-status"
-                class="section-status"
-                role="status"
-                aria-live="polite"
-              >
-                Loading latest updates...
-              </p>
-            </div>
-            <a href="announcements.html" class="btn btn-secondary section-button">
-              View All Announcements
-            </a>
-          </div>
-          <div
-            id="announcements-list"
-            class="content-grid announcements-grid"
-          ></div>
-        </div>
-      </section>
-
-      <section id="gallery" class="content-section">
-        <div
-          class="section-background gallery-background"
-          aria-hidden="true"
-        ></div>
-        <div class="section-shade section-shade-soft" aria-hidden="true"></div>
-        <div class="container section-inner">
-          <div class="section-header">
-            <div class="section-heading">
-              <p class="section-kicker">Gallery</p>
-              <h2 class="section-title">Memories from the court</h2>
-              <p
-                id="gallery-status"
-                class="section-status"
-                role="status"
-                aria-live="polite"
-              >
-                Loading latest updates...
-              </p>
-            </div>
-            <a href="gallery.html" class="btn btn-secondary section-button">
-              View Full Gallery
-            </a>
-          </div>
-          <div id="gallery-grid" class="content-grid gallery-grid"></div>
-        </div>
-      </section>
-
-      <section id="videos" class="content-section">
-        <video
-          class="section-background-media videos-background-media"
-          autoplay
-          muted
-          loop
-          playsinline
-          preload="metadata"
-          aria-hidden="true"
-        >
-          <source src="assets/videos/VID-20260312-WA0035_001.mp4" type="video/mp4" />
-        </video>
-        <div
-          class="section-shade section-shade-strong"
-          aria-hidden="true"
-        ></div>
-        <div class="container section-inner">
-          <div class="section-header">
-            <div class="section-heading">
-              <p class="section-kicker">Video Highlights</p>
-              <h2 class="section-title">Watch the latest action</h2>
-              <p
-                id="videos-status"
-                class="section-status"
-                role="status"
-                aria-live="polite"
-              >
-                Loading latest updates...
-              </p>
-            </div>
-            <a href="videos.html" class="btn btn-secondary section-button">
-              View All Videos
-            </a>
-          </div>
-          <div id="video-list" class="content-grid video-grid"></div>
-        </div>
-      </section>
-
-      <section id="fixtures" class="content-section">
-        <div
-          class="section-background fixtures-background"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="section-shade section-shade-medium"
-          aria-hidden="true"
-        ></div>
-        <div class="container section-inner">
-          <div class="section-header">
-            <div class="section-heading">
-              <p class="section-kicker">Fixtures & Results</p>
-              <h2 class="section-title">Upcoming matches</h2>
-              <p
-                id="fixtures-status"
-                class="section-status"
-                role="status"
-                aria-live="polite"
-              >
-                Loading latest updates...
-              </p>
-            </div>
-            <a href="fixtures.html" class="btn btn-secondary section-button">
-              View All Fixtures
-            </a>
-          </div>
-          <div id="fixtures-list" class="content-grid fixtures-grid"></div>
         </div>
       </section>
     </main>
@@ -669,9 +698,11 @@
             <p class="mini-kicker">Quick Links</p>
             <ul class="contact-list">
               <li><a href="#about">About the club</a></li>
-              <li><a href="announcements.html">Announcements</a></li>
-              <li><a href="gallery.html">Gallery</a></li>
-              <li><a href="videos.html">Videos</a></li>
+              <li><a href="#announcements">Announcements</a></li>
+              <li><a href="#fixtures">Fixtures</a></li>
+              <li><a href="#gallery">Gallery</a></li>
+              <li><a href="#videos">Videos</a></li>
+              <li><a href="#contact">Contact</a></li>
             </ul>
           </article>
         </div>
