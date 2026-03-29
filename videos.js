@@ -252,6 +252,19 @@ function sortVideos(items) {
   });
 }
 
+function getVideoArchiveSignature(items) {
+  return sortVideos(items)
+    .filter((item) => item.sourceUrl || item.embedUrl)
+    .map((item) => [
+      item.id || "",
+      item.sourceUrl || "",
+      item.embedUrl || "",
+      item.date || "",
+      getTimestampMilliseconds(item.updatedAt || item.createdAt)
+    ].join("|"))
+    .join("||");
+}
+
 function updateVideoStats(items) {
   const total = document.getElementById("video-total");
 
@@ -343,6 +356,7 @@ function renderArchiveState(title, message, kicker = "Video Archive") {
 
   card.append(cardKicker, heading, copy);
   container.replaceChildren(card);
+  container.dataset.renderSignature = `state|${kicker}|${title}|${message}`;
 }
 
 function renderVideoArchive(items) {
@@ -353,10 +367,11 @@ function renderVideoArchive(items) {
   }
 
   const sortedVideos = sortVideos(items).filter((item) => item.sourceUrl || item.embedUrl);
+  const nextSignature = getVideoArchiveSignature(items);
   updateVideoStats(sortedVideos);
-  renderFeaturedVideo(sortedVideos[0]);
 
   if (!sortedVideos.length) {
+    renderFeaturedVideo();
     renderArchiveState(
       "No videos yet",
       "The club has not published any video highlights yet. Check back soon for the first upload."
@@ -364,6 +379,11 @@ function renderVideoArchive(items) {
     return;
   }
 
+  if (container.dataset.renderSignature === nextSignature) {
+    return;
+  }
+
+  renderFeaturedVideo(sortedVideos[0]);
   container.replaceChildren();
 
   sortedVideos.forEach((item) => {
@@ -385,6 +405,8 @@ function renderVideoArchive(items) {
     card.append(media, copy);
     container.appendChild(card);
   });
+
+  container.dataset.renderSignature = nextSignature;
 }
 
 async function loadVideos() {

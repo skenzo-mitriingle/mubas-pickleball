@@ -761,6 +761,20 @@ function sortVideos(items) {
   });
 }
 
+function getVisibleVideoSignature(items) {
+  return sortVideos(items)
+    .filter((item) => item.sourceUrl || item.embedUrl)
+    .slice(0, 4)
+    .map((item) => [
+      item.id || "",
+      item.sourceUrl || "",
+      item.embedUrl || "",
+      item.date || "",
+      getTimestampMilliseconds(item.updatedAt || item.createdAt)
+    ].join("|"))
+    .join("||");
+}
+
 function normalizeFixtureStatus(status) {
   return status === "completed" ? "completed" : "upcoming";
 }
@@ -1375,6 +1389,7 @@ function renderVideoState(title, message, dateLabel = "Video Update") {
   copy.append(date, heading, text);
   card.appendChild(copy);
   container.replaceChildren(card);
+  container.dataset.renderSignature = `state|${dateLabel}|${title}|${message}`;
 }
 
 function renderVideos(items) {
@@ -1387,12 +1402,17 @@ function renderVideos(items) {
   const visibleVideos = sortVideos(items)
     .filter((item) => item.sourceUrl || item.embedUrl)
     .slice(0, 4);
+  const nextSignature = getVisibleVideoSignature(items);
 
   if (!visibleVideos.length) {
     renderVideoState(
       "No videos yet",
       "The club has not published any video highlights yet. Check back soon for the first upload."
     );
+    return;
+  }
+
+  if (container.dataset.renderSignature === nextSignature) {
     return;
   }
 
@@ -1417,6 +1437,8 @@ function renderVideos(items) {
     card.append(media, copy);
     container.appendChild(card);
   });
+
+  container.dataset.renderSignature = nextSignature;
 }
 
 async function loadVideos() {
