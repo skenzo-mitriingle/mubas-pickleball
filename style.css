@@ -1339,8 +1339,11 @@ iframe {
   padding: 0.75rem;
 }
 
-.videos-background-media {
-  opacity: 0.7;
+.videos-background {
+  background:
+    radial-gradient(circle at 18% 30%, rgba(34, 211, 238, 0.18), transparent 26%),
+    radial-gradient(circle at 78% 68%, rgba(45, 212, 191, 0.14), transparent 24%),
+    linear-gradient(135deg, rgba(5, 15, 24, 0.96), rgba(7, 22, 34, 0.93) 52%, rgba(11, 27, 40, 0.92));
 }
 
 .video-frame {
