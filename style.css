@@ -142,8 +142,8 @@ iframe {
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 6rem;
-  height: 6rem;
+  width: 4rem;
+  height: 4rem;
   overflow: hidden;
   border: 1px solid var(--surface-border-strong);
   border-radius: 1rem;

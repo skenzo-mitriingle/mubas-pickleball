@@ -162,7 +162,6 @@ body[data-auth-state="guest"] .manage-shell {
 
 .topbar,
 .intro-panel,
-.notes-panel,
 .form-panel,
 .list-panel {
   padding: 1.45rem;
@@ -340,23 +339,6 @@ body[data-auth-state="guest"] .session-dot {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-}
-
-.note-list {
-  display: grid;
-  gap: 0.8rem;
-  margin: 1rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.note-list li {
-  padding: 0.95rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  background: var(--surface-soft);
-  color: var(--text-soft);
-  line-height: 1.7;
 }
 
 .panel-heading {
@@ -611,10 +593,6 @@ body[data-auth-state="guest"] .session-dot {
 }
 
 @media (min-width: 980px) {
-  .intro-layout {
-    grid-template-columns: minmax(0, 1.35fr) minmax(18rem, 0.9fr);
-  }
-
   .workspace-layout {
     grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
     align-items: start;
@@ -628,7 +606,6 @@ body[data-auth-state="guest"] .session-dot {
 @media (max-width: 759px) {
   .topbar,
   .intro-panel,
-  .notes-panel,
   .form-panel,
   .list-panel {
     padding: 1.2rem;

@@ -14,10 +14,8 @@
   </div>
 
   <main class="dashboard-shell">
-    <header class="dashboard-topbar panel">
-      <a href="index.html" class="home-link">Back to Website</a>
-
-      <div class="brand-lockup">
+    <aside class="dashboard-sidebar panel">
+      <div class="sidebar-brand">
         <div class="brand-frame">
           <img
             src="assets/logo/log.jpeg"
@@ -28,120 +26,141 @@
 
         <div class="brand-copy">
           <p class="panel-kicker">Mubas Pickleball Club</p>
-          <h1 class="page-title">Admin Dashboard</h1>
+          <h1 class="sidebar-title">Admin Console</h1>
         </div>
       </div>
 
-      <div class="session-chip">
-        <span class="session-dot" aria-hidden="true"></span>
-        <span id="admin-identity">Checking access...</span>
+      <section class="admin-profile" aria-labelledby="admin-profile-title">
+        <div class="profile-avatar">
+          <span class="profile-avatar-core">AD</span>
+        </div>
+        <h2 id="admin-profile-title" class="profile-title">Club Administrator</h2>
+        <p id="admin-identity" class="profile-subtitle">Checking access...</p>
+      </section>
+
+      <div class="sidebar-nav-block">
+        <p class="panel-kicker">Navigation</p>
+
+        <nav class="sidebar-nav" aria-label="Admin dashboard sections">
+          <button class="sidebar-link is-active" type="button" data-section="announcements" aria-pressed="true">
+            <span class="sidebar-link-index">01</span>
+            <span class="sidebar-link-copy">
+              <span class="sidebar-link-title">Announcements</span>
+            </span>
+          </button>
+
+          <button class="sidebar-link" type="button" data-section="gallery" aria-pressed="false">
+            <span class="sidebar-link-index">02</span>
+            <span class="sidebar-link-copy">
+              <span class="sidebar-link-title">Gallery</span>
+            </span>
+          </button>
+
+          <button class="sidebar-link" type="button" data-section="videos" aria-pressed="false">
+            <span class="sidebar-link-index">03</span>
+            <span class="sidebar-link-copy">
+              <span class="sidebar-link-title">Videos</span>
+            </span>
+          </button>
+
+          <button class="sidebar-link" type="button" data-section="fixtures" aria-pressed="false">
+            <span class="sidebar-link-index">04</span>
+            <span class="sidebar-link-copy">
+              <span class="sidebar-link-title">Fixtures</span>
+            </span>
+          </button>
+
+          <button class="sidebar-link sidebar-link-logout" type="button" data-section="logout">
+            <span class="sidebar-link-index">05</span>
+            <span class="sidebar-link-copy">
+              <span class="sidebar-link-title">Logout</span>
+            </span>
+          </button>
+        </nav>
       </div>
-    </header>
 
-    <section class="hero-layout">
-      <article class="hero-panel panel">
-        <p class="panel-kicker">Control Panel</p>
-        <h2 class="hero-title">Manage the club website from one clean workspace.</h2>
-        <p class="hero-copy">
-          Use the dashboard cards below to focus on announcements, gallery items, videos, fixtures, and secure session logout.
-        </p>
+      <div class="sidebar-footer">
+        <div class="sidebar-session">
+          <span class="session-dot" aria-hidden="true"></span>
+          <span id="session-state">Checking access...</span>
+        </div>
 
-        <div class="hero-meta">
-          <div class="meta-block">
-            <span class="meta-label">Session</span>
-            <strong id="session-state">Checking access...</strong>
+        <a href="index.html" class="sidebar-home-link">Back to Website</a>
+      </div>
+    </aside>
+
+    <section class="dashboard-main">
+      <header class="dashboard-topbar panel">
+        <div class="topbar-copy">
+          <p class="panel-kicker">Admin Dashboard</p>
+          <h2 class="page-title">Content Operations</h2>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="session-chip">
+            <span class="session-dot" aria-hidden="true"></span>
+            <span id="summary-session-state">Checking...</span>
           </div>
 
-          <div class="meta-block">
-            <span class="meta-label">Today</span>
-            <strong id="dashboard-date">Loading...</strong>
+          <div class="time-chip">
+            <strong id="dashboard-time" class="time-chip-value">Loading...</strong>
+            <span id="dashboard-date" class="time-chip-copy">Loading date...</span>
           </div>
         </div>
-      </article>
+      </header>
 
-      <aside class="focus-panel panel">
-        <p id="focus-kicker" class="panel-kicker">Selected Section</p>
-        <h3 id="focus-title" class="focus-title">Announcements</h3>
-        <p id="focus-description" class="focus-description">
-          Publish the latest club notices, reminders, and updates.
-        </p>
-        <div id="focus-tags" class="focus-tags"></div>
-        <a id="focus-action" class="focus-action" href="manage-announcements.html">
-          Open announcements manager
-        </a>
-      </aside>
-    </section>
+      <section class="dashboard-content-grid">
+        <article class="workspace-panel panel">
+          <p id="focus-kicker" class="panel-kicker">Current Section</p>
+          <h3 id="focus-title" class="workspace-title">Announcements</h3>
+        </article>
 
-    <section class="cards-section" aria-labelledby="dashboard-sections-title">
-      <div class="section-heading">
-        <div>
-          <p class="panel-kicker">Dashboard Sections</p>
-          <h2 id="dashboard-sections-title" class="section-title">Choose what you want to manage</h2>
+        <aside class="overview-column">
+          <article class="overview-card panel">
+            <p class="panel-kicker">Focus Meter</p>
+
+            <div id="meter-ring" class="meter-ring" style="--progress: 25;">
+              <div class="meter-core">
+                <span id="meter-value" class="meter-value">25%</span>
+                <span id="meter-label" class="meter-label">1 of 4</span>
+              </div>
+            </div>
+
+          </article>
+        </aside>
+      </section>
+
+      <section class="overview-panel panel" aria-labelledby="overview-title">
+        <div class="overview-header">
+          <div>
+            <p class="panel-kicker">Content Overview</p>
+            <h3 id="overview-title" class="overview-title">Content Summary</h3>
+          </div>
+
         </div>
 
-        <p class="section-copy">
-          Think of this as your admin control panel for club content and account access.
-        </p>
-      </div>
+        <div class="overview-stats">
+          <article class="overview-stat">
+            <span class="overview-stat-label">Announcements</span>
+            <strong id="count-announcements" class="overview-stat-value">--</strong>
+          </article>
 
-      <div class="cards-grid">
-        <button class="dashboard-card is-active" type="button" data-section="announcements" aria-pressed="true">
-          <span class="card-number">01</span>
-          <span class="card-title">Announcements</span>
-          <span class="card-copy">Share alerts, notices, training reminders, and important club updates.</span>
-          <span class="card-link">Focus section</span>
-        </button>
+          <article class="overview-stat">
+            <span class="overview-stat-label">Gallery</span>
+            <strong id="count-gallery" class="overview-stat-value">--</strong>
+          </article>
 
-        <button class="dashboard-card" type="button" data-section="gallery" aria-pressed="false">
-          <span class="card-number">02</span>
-          <span class="card-title">Gallery</span>
-          <span class="card-copy">Prepare photo updates, featured images, and moments from the court.</span>
-          <span class="card-link">Focus section</span>
-        </button>
+          <article class="overview-stat">
+            <span class="overview-stat-label">Videos</span>
+            <strong id="count-videos" class="overview-stat-value">--</strong>
+          </article>
 
-        <button class="dashboard-card" type="button" data-section="videos" aria-pressed="false">
-          <span class="card-number">03</span>
-          <span class="card-title">Videos</span>
-          <span class="card-copy">Organize highlights, training clips, and match recap video content.</span>
-          <span class="card-link">Focus section</span>
-        </button>
-
-        <button class="dashboard-card" type="button" data-section="fixtures" aria-pressed="false">
-          <span class="card-number">04</span>
-          <span class="card-title">Fixtures</span>
-          <span class="card-copy">Track upcoming matches, opponents, dates, venues, and results.</span>
-          <span class="card-link">Focus section</span>
-        </button>
-
-        <button class="dashboard-card is-logout" type="button" data-section="logout">
-          <span class="card-number">05</span>
-          <span class="card-title">Logout</span>
-          <span class="card-copy">Sign out of the admin session safely and return to the login page.</span>
-          <span class="card-link">Sign out now</span>
-        </button>
-      </div>
-    </section>
-
-    <section class="detail-layout">
-      <article class="detail-panel panel">
-        <p class="panel-kicker">Workspace Notes</p>
-        <h3 id="detail-title" class="detail-title">Announcements workspace</h3>
-        <p id="detail-copy" class="detail-copy">
-          Keep members informed with short, timely updates and clear deadlines.
-        </p>
-        <ul id="detail-list" class="detail-list"></ul>
-      </article>
-
-      <article class="detail-panel panel status-panel">
-        <p class="panel-kicker">Status</p>
-        <h3 class="detail-title">Admin session ready</h3>
-        <p class="detail-copy">
-          Select any content card to update the focus area. The logout card signs you out immediately through Firebase.
-        </p>
-        <p id="action-feedback" class="action-feedback" role="status" aria-live="polite">
-          Waiting for admin verification...
-        </p>
-      </article>
+          <article class="overview-stat">
+            <span class="overview-stat-label">Fixtures</span>
+            <strong id="count-fixtures" class="overview-stat-value">--</strong>
+          </article>
+        </div>
+      </section>
     </section>
   </main>
 
