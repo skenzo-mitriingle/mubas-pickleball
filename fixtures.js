@@ -5,6 +5,10 @@ import {
   query
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
 import { db } from "./firebase-config.js";
+import {
+  getAdaptiveRefreshInterval,
+  scheduleVisibilityAwareRefresh
+} from "./performance-utils.js";
 
 const FIXTURES_COLLECTION = "fixtureItems";
 const FIXTURES_CACHE_KEY = "mubas-pickleball:fixtures-cache";
@@ -609,6 +613,7 @@ function setupMobileMenu() {
   syncMenuState();
 }
 
-loadFixtures();
-window.setInterval(loadFixtures, 60000);
+scheduleVisibilityAwareRefresh(loadFixtures, {
+  intervalMs: getAdaptiveRefreshInterval()
+});
 setupMobileMenu();

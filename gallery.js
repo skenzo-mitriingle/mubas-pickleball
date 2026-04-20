@@ -5,6 +5,10 @@ import {
   query
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
 import { db } from "./firebase-config.js";
+import {
+  getAdaptiveRefreshInterval,
+  scheduleVisibilityAwareRefresh
+} from "./performance-utils.js";
 
 const GALLERY_COLLECTION = "galleryItems";
 const GALLERY_CACHE_KEY = "mubas-pickleball:gallery-cache";
@@ -801,6 +805,7 @@ function setupMobileMenu() {
 }
 
 setupGalleryLightbox();
-loadGallery();
-window.setInterval(loadGallery, 60000);
+scheduleVisibilityAwareRefresh(loadGallery, {
+  intervalMs: getAdaptiveRefreshInterval()
+});
 setupMobileMenu();

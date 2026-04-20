@@ -230,15 +230,104 @@ export function getVideoAction(item) {
   };
 }
 
+function createIframeElement(source, mediaClass, title, lazy) {
+  const iframe = document.createElement("iframe");
+  iframe.className = mediaClass;
+  iframe.src = source.embedUrl;
+  iframe.title = title;
+  iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+  iframe.allowFullscreen = true;
+
+  if (lazy) {
+    iframe.loading = "lazy";
+  }
+
+  return iframe;
+}
+
+function createDirectVideoElement(source, mediaClass, autoplay = false) {
+  const video = document.createElement("video");
+  const sourceElement = document.createElement("source");
+
+  video.className = mediaClass;
+  video.controls = true;
+  video.preload = autoplay ? "auto" : "metadata";
+  video.playsInline = true;
+  video.autoplay = autoplay;
+  sourceElement.src = source.sourceUrl;
+  sourceElement.type = source.mimeType || "video/mp4";
+  video.appendChild(sourceElement);
+
+  return video;
+}
+
+function getEmbedPlaybackUrl(source) {
+  if (!source.embedUrl) {
+    return "";
+  }
+
+  const separator = source.embedUrl.includes("?") ? "&" : "?";
+
+  if (source.provider === "youtube") {
+    return `${source.embedUrl}${separator}autoplay=1&playsinline=1`;
+  }
+
+  if (source.provider === "vimeo") {
+    return `${source.embedUrl}${separator}autoplay=1`;
+  }
+
+  return source.embedUrl;
+}
+
+function createDeferredEmbedLauncher(frame, source, mediaClass, title) {
+  const launcher = document.createElement("button");
+  launcher.type = "button";
+  launcher.className = `${mediaClass} video-embed-launcher`;
+  launcher.setAttribute("aria-label", `Load ${source.providerLabel} video: ${title}`);
+
+  const provider = document.createElement("span");
+  provider.className = "video-embed-launcher-badge";
+  provider.textContent = source.providerLabel;
+
+  const prompt = document.createElement("span");
+  prompt.className = "video-embed-launcher-title";
+  prompt.textContent = title;
+
+  launcher.append(provider, prompt);
+
+  launcher.addEventListener("click", () => {
+    if (source.kind === "iframe" && source.embedUrl) {
+      const iframe = createIframeElement(
+        { ...source, embedUrl: getEmbedPlaybackUrl(source) },
+        mediaClass,
+        title,
+        false
+      );
+      frame.replaceChildren(iframe);
+      return;
+    }
+
+    if (source.kind === "direct" && source.sourceUrl) {
+      const video = createDirectVideoElement(source, mediaClass, true);
+      frame.replaceChildren(video);
+      void video.play().catch(() => {});
+    }
+  });
+
+  return launcher;
+}
+
 export function createVideoMediaElement(item, options = {}) {
   const {
     frameClass = "video-frame",
     mediaClass = "video-embed",
     title = item?.title || "Club video",
-    lazy = true
+    lazy = true,
+    defer = false
   } = options;
   const source = normalizeStoredVideo(item);
   const frame = document.createElement("div");
+  const shouldDeferMediaLoad = Boolean(defer);
 
   frame.className = frameClass;
 
@@ -250,34 +339,18 @@ export function createVideoMediaElement(item, options = {}) {
     return frame;
   }
 
+  if (shouldDeferMediaLoad) {
+    frame.appendChild(createDeferredEmbedLauncher(frame, source, mediaClass, title));
+    return frame;
+  }
+
   if (source.kind === "iframe" && source.embedUrl) {
-    const iframe = document.createElement("iframe");
-    iframe.className = mediaClass;
-    iframe.src = source.embedUrl;
-    iframe.title = title;
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    iframe.allowFullscreen = true;
-
-    if (lazy) {
-      iframe.loading = "lazy";
-    }
-
-    frame.appendChild(iframe);
+    frame.appendChild(createIframeElement(source, mediaClass, title, lazy));
     return frame;
   }
 
   if (source.kind === "direct" && source.sourceUrl) {
-    const video = document.createElement("video");
-    const sourceElement = document.createElement("source");
-
-    video.className = mediaClass;
-    video.controls = true;
-    video.preload = "metadata";
-    video.playsInline = true;
-    sourceElement.src = source.sourceUrl;
-    sourceElement.type = source.mimeType || "video/mp4";
-    video.appendChild(sourceElement);
-    frame.appendChild(video);
+    frame.appendChild(createDirectVideoElement(source, mediaClass));
     return frame;
   }
 

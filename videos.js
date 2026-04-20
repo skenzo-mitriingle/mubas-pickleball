@@ -6,6 +6,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
 import { db } from "./firebase-config.js";
 import {
+  getAdaptiveRefreshInterval,
+  prefersLiteExperience,
+  scheduleVisibilityAwareRefresh
+} from "./performance-utils.js";
+import {
   createVideoMediaElement,
   getVideoAction
 } from "./video-utils.js";
@@ -315,8 +320,10 @@ function renderFeaturedVideo(item) {
   }
 
   const action = getVideoAction(item);
+  const useLiteVideoEmbeds = prefersLiteExperience();
   const featuredMedia = createVideoMediaElement(item, {
-    title: item.title || item.description || "Featured club video"
+    title: item.title || item.description || "Featured club video",
+    defer: useLiteVideoEmbeds
   });
 
   featuredPlayer.replaceChildren(featuredMedia);
@@ -368,6 +375,7 @@ function renderVideoArchive(items) {
 
   const sortedVideos = sortVideos(items).filter((item) => item.sourceUrl || item.embedUrl);
   const nextSignature = getVideoArchiveSignature(items);
+  const useLiteVideoEmbeds = prefersLiteExperience();
   updateVideoStats(sortedVideos);
 
   if (!sortedVideos.length) {
@@ -391,7 +399,8 @@ function renderVideoArchive(items) {
     card.className = "glass-card video-archive-card";
 
     const media = createVideoMediaElement(item, {
-      title: item.title || item.description || "Club video"
+      title: item.title || item.description || "Club video",
+      defer: useLiteVideoEmbeds
     });
 
     const copy = document.createElement("div");
@@ -541,6 +550,7 @@ function setupMobileMenu() {
   syncMenuState();
 }
 
-loadVideos();
-window.setInterval(loadVideos, 60000);
+scheduleVisibilityAwareRefresh(loadVideos, {
+  intervalMs: getAdaptiveRefreshInterval()
+});
 setupMobileMenu();

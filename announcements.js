@@ -5,6 +5,10 @@ import {
   query
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
 import { db } from "./firebase-config.js";
+import {
+  getAdaptiveRefreshInterval,
+  scheduleVisibilityAwareRefresh
+} from "./performance-utils.js";
 
 const ANNOUNCEMENTS_COLLECTION = "announcements";
 const ANNOUNCEMENTS_CACHE_KEY = "mubas-pickleball:announcements-cache";
@@ -481,6 +485,7 @@ function setupMobileMenu() {
   syncMenuState();
 }
 
-loadAnnouncements();
-window.setInterval(loadAnnouncements, 60000);
+scheduleVisibilityAwareRefresh(loadAnnouncements, {
+  intervalMs: getAdaptiveRefreshInterval()
+});
 setupMobileMenu();

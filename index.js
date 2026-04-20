@@ -6,6 +6,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-lite.js";
 import { db } from "./firebase-config.js";
 import {
+  getAdaptiveRefreshInterval,
+  prefersLiteExperience,
+  scheduleVisibilityAwareRefresh
+} from "./performance-utils.js";
+import {
   createVideoMediaElement
 } from "./video-utils.js";
 
@@ -1539,6 +1544,7 @@ function renderVideos(items) {
     .filter((item) => item.sourceUrl || item.embedUrl)
     .slice(0, 4);
   const nextSignature = getVisibleVideoSignature(items);
+  const useLiteVideoEmbeds = prefersLiteExperience();
 
   if (!visibleVideos.length) {
     renderVideoState(
@@ -1560,7 +1566,8 @@ function renderVideos(items) {
     card.className = "glass-card video-card";
 
     const media = createVideoMediaElement(item, {
-      title: item.title || item.description || "Club video"
+      title: item.title || item.description || "Club video",
+      defer: useLiteVideoEmbeds
     });
 
     const copy = document.createElement("div");
@@ -1868,13 +1875,11 @@ function setupMobileMenu() {
   syncMenuState();
 }
 
-loadAnnouncements();
-loadGallery();
-loadVideos();
-loadFixtures();
-window.setInterval(loadAnnouncements, 60000);
-window.setInterval(loadGallery, 60000);
-window.setInterval(loadVideos, 60000);
-window.setInterval(loadFixtures, 60000);
+const refreshInterval = getAdaptiveRefreshInterval();
+
+scheduleVisibilityAwareRefresh(loadAnnouncements, { intervalMs: refreshInterval });
+scheduleVisibilityAwareRefresh(loadGallery, { intervalMs: refreshInterval });
+scheduleVisibilityAwareRefresh(loadVideos, { intervalMs: refreshInterval });
+scheduleVisibilityAwareRefresh(loadFixtures, { intervalMs: refreshInterval });
 setupHomeGalleryLightbox();
 setupMobileMenu();

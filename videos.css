@@ -1,12 +1,11 @@
 body.site-body.videos-page {
   background-image:
     radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 24%),
-    linear-gradient(160deg, rgba(4, 16, 24, 0.8) 0%, rgba(7, 21, 34, 0.88) 45%, rgba(15, 23, 42, 0.95) 100%),
-    url("assets/images/home.jpeg");
-  background-position: center, center, center;
-  background-size: auto, auto, cover;
+    linear-gradient(160deg, rgba(4, 16, 24, 0.8) 0%, rgba(7, 21, 34, 0.88) 45%, rgba(15, 23, 42, 0.95) 100%);
+  background-position: center, center;
+  background-size: auto, auto;
   background-repeat: no-repeat;
-  background-attachment: scroll, scroll, fixed;
+  background-attachment: scroll, scroll;
 }
 
 body.site-body.videos-page .site-header {
@@ -34,9 +33,16 @@ body.site-body.videos-page .nav-link[aria-current="page"] {
   background: linear-gradient(135deg, rgba(4, 16, 24, 0.4), rgba(15, 23, 42, 0.2));
 }
 
-@media (max-width: 63.9375rem) {
+@media (min-width: 48rem) {
   body.site-body.videos-page {
-    background-attachment: scroll, scroll, scroll;
+    background-image:
+      radial-gradient(circle at top right, rgba(56, 189, 248, 0.16), transparent 24%),
+      linear-gradient(160deg, rgba(4, 16, 24, 0.8) 0%, rgba(7, 21, 34, 0.88) 45%, rgba(15, 23, 42, 0.95) 100%),
+      url("assets/images/home.jpeg");
+    background-position: center, center, center;
+    background-size: auto, auto, cover;
+    background-repeat: no-repeat;
+    background-attachment: scroll, scroll, fixed;
   }
 }
 
