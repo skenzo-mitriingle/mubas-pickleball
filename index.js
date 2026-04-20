@@ -93,6 +93,141 @@ function setFixturesStatus(message, state = "") {
   }
 }
 
+function setSectionBusy(containerId, isBusy) {
+  const container = document.getElementById(containerId);
+
+  if (!container) {
+    return;
+  }
+
+  container.setAttribute("aria-busy", isBusy ? "true" : "false");
+}
+
+function createSkeletonLine(className = "") {
+  const line = document.createElement("span");
+  line.className = `skeleton-line${className ? ` ${className}` : ""}`;
+  line.setAttribute("aria-hidden", "true");
+  return line;
+}
+
+function createSkeletonBlock(className = "") {
+  const block = document.createElement("span");
+  block.className = `skeleton-block${className ? ` ${className}` : ""}`;
+  block.setAttribute("aria-hidden", "true");
+  return block;
+}
+
+function createSkeletonCard(className) {
+  const card = document.createElement("article");
+  card.className = `glass-card ${className} skeleton-card`;
+  card.setAttribute("aria-hidden", "true");
+  return card;
+}
+
+function renderAnnouncementSkeletons() {
+  const container = document.getElementById("announcements-list");
+
+  if (!container) {
+    return;
+  }
+
+  const cards = Array.from({ length: 3 }, () => {
+    const card = createSkeletonCard("announcement-card");
+    card.append(
+      createSkeletonLine("skeleton-line-meta"),
+      createSkeletonLine("skeleton-line-long"),
+      createSkeletonLine("skeleton-line-medium"),
+      createSkeletonLine("skeleton-line-short")
+    );
+    return card;
+  });
+
+  container.replaceChildren(...cards);
+  setSectionBusy("announcements-list", true);
+}
+
+function renderGallerySkeletons() {
+  const container = document.getElementById("gallery-grid");
+
+  if (!container) {
+    return;
+  }
+
+  visibleHomeGalleryItems = [];
+  updateHomeGalleryNavigationState();
+
+  const cards = Array.from({ length: 4 }, () => {
+    const card = createSkeletonCard("gallery-card");
+    const caption = document.createElement("div");
+    caption.className = "gallery-caption";
+
+    caption.append(
+      createSkeletonLine("skeleton-line-meta"),
+      createSkeletonLine("skeleton-line-short")
+    );
+    card.append(createSkeletonBlock(), caption);
+    return card;
+  });
+
+  container.replaceChildren(...cards);
+  setSectionBusy("gallery-grid", true);
+}
+
+function renderVideoSkeletons() {
+  const container = document.getElementById("video-list");
+
+  if (!container) {
+    return;
+  }
+
+  const cards = Array.from({ length: 4 }, () => {
+    const card = createSkeletonCard("video-card");
+    const media = document.createElement("div");
+    media.className = "video-frame skeleton-block";
+
+    const copy = document.createElement("div");
+    copy.className = "video-copy video-copy-compact";
+    copy.appendChild(createSkeletonLine("skeleton-line-meta"));
+
+    card.append(media, copy);
+    return card;
+  });
+
+  container.replaceChildren(...cards);
+  delete container.dataset.renderSignature;
+  setSectionBusy("video-list", true);
+}
+
+function renderFixtureSkeletons() {
+  const container = document.getElementById("fixtures-list");
+
+  if (!container) {
+    return;
+  }
+
+  const cards = Array.from({ length: 4 }, () => {
+    const card = createSkeletonCard("fixture-card");
+    const head = document.createElement("div");
+    head.className = "fixture-card-head";
+
+    const chip = document.createElement("span");
+    chip.className = "skeleton-pill";
+    chip.setAttribute("aria-hidden", "true");
+
+    head.append(chip, createSkeletonLine("skeleton-line-meta"));
+    card.append(
+      head,
+      createSkeletonLine("skeleton-line-title"),
+      createSkeletonLine("skeleton-line-medium"),
+      createSkeletonLine("skeleton-line-short")
+    );
+    return card;
+  });
+
+  container.replaceChildren(...cards);
+  setSectionBusy("fixtures-list", true);
+}
+
 function getTimestampMilliseconds(timestamp) {
   if (!timestamp) {
     return 0;
@@ -1076,6 +1211,7 @@ function renderAnnouncementState(title, message, dateLabel = "Live Updates") {
 
   card.append(date, heading, copy);
   container.replaceChildren(card);
+  setSectionBusy("announcements-list", false);
 }
 
 function renderAnnouncements(items) {
@@ -1112,6 +1248,8 @@ function renderAnnouncements(items) {
     card.append(date, copy);
     container.appendChild(card);
   });
+
+  setSectionBusy("announcements-list", false);
 }
 
 async function loadAnnouncements() {
@@ -1127,10 +1265,7 @@ async function loadAnnouncements() {
     renderAnnouncements(cachedAnnouncements);
     setAnnouncementsStatus("Showing saved updates while loading.");
   } else {
-    renderAnnouncementState(
-      "Loading announcements...",
-      "Fetching the latest club updates."
-    );
+    renderAnnouncementSkeletons();
     setAnnouncementsStatus("Loading latest updates...");
   }
 
@@ -1206,6 +1341,7 @@ function renderGalleryState(title, message, dateLabel = "Gallery Update") {
   copy.append(date, heading, text);
   card.appendChild(copy);
   container.replaceChildren(card);
+  setSectionBusy("gallery-grid", false);
 }
 
 function renderGallery(items) {
@@ -1281,6 +1417,8 @@ function renderGallery(items) {
     container.appendChild(card);
   });
 
+  setSectionBusy("gallery-grid", false);
+
   if (!homeGalleryLightbox?.hidden && activeHomeGalleryItem) {
     const matchingActiveItem = visibleHomeGalleryItems.find((item) => (
       item.id === activeHomeGalleryItem.id
@@ -1312,10 +1450,7 @@ async function loadGallery() {
     renderGallery(cachedGalleryItems);
     setGalleryStatus("Showing saved updates while loading.");
   } else {
-    renderGalleryState(
-      "Loading gallery...",
-      "Fetching the latest club photos."
-    );
+    renderGallerySkeletons();
     setGalleryStatus("Loading latest updates...");
   }
 
@@ -1390,6 +1525,7 @@ function renderVideoState(title, message, dateLabel = "Video Update") {
   card.appendChild(copy);
   container.replaceChildren(card);
   container.dataset.renderSignature = `state|${dateLabel}|${title}|${message}`;
+  setSectionBusy("video-list", false);
 }
 
 function renderVideos(items) {
@@ -1413,6 +1549,7 @@ function renderVideos(items) {
   }
 
   if (container.dataset.renderSignature === nextSignature) {
+    setSectionBusy("video-list", false);
     return;
   }
 
@@ -1439,6 +1576,7 @@ function renderVideos(items) {
   });
 
   container.dataset.renderSignature = nextSignature;
+  setSectionBusy("video-list", false);
 }
 
 async function loadVideos() {
@@ -1454,10 +1592,7 @@ async function loadVideos() {
     renderVideos(cachedVideos);
     setVideosStatus("Showing saved updates while loading.");
   } else {
-    renderVideoState(
-      "Loading videos...",
-      "Fetching the latest club highlights."
-    );
+    renderVideoSkeletons();
     setVideosStatus("Loading latest updates...");
   }
 
@@ -1527,6 +1662,7 @@ function renderFixtureState(title, message, dateLabel = "Fixture Update") {
 
   card.append(date, heading, text);
   container.replaceChildren(card);
+  setSectionBusy("fixtures-list", false);
 }
 
 function renderFixtures(items) {
@@ -1598,6 +1734,8 @@ function renderFixtures(items) {
 
     container.appendChild(card);
   });
+
+  setSectionBusy("fixtures-list", false);
 }
 
 async function loadFixtures() {
@@ -1613,10 +1751,7 @@ async function loadFixtures() {
     renderFixtures(cachedFixtures);
     setFixturesStatus("Showing saved updates while loading.");
   } else {
-    renderFixtureState(
-      "Loading fixtures...",
-      "Fetching the latest match schedule and results."
-    );
+    renderFixtureSkeletons();
     setFixturesStatus("Loading latest updates...");
   }
 

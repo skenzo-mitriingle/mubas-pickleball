@@ -1260,6 +1260,121 @@ iframe {
   line-height: 1.7;
 }
 
+.skeleton-card {
+  pointer-events: none;
+  user-select: none;
+}
+
+.skeleton-card:hover {
+  transform: none;
+  background: var(--surface);
+}
+
+.skeleton-line,
+.skeleton-block,
+.skeleton-pill {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: rgba(148, 163, 184, 0.18);
+}
+
+.skeleton-line::after,
+.skeleton-block::after,
+.skeleton-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.12) 35%,
+    rgba(255, 255, 255, 0.32) 50%,
+    rgba(255, 255, 255, 0.12) 65%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.skeleton-line {
+  height: 0.875rem;
+  margin-top: 0.85rem;
+  border-radius: 999px;
+}
+
+.skeleton-card .skeleton-line:first-child {
+  margin-top: 0;
+}
+
+.skeleton-line-meta {
+  width: 7.5rem;
+  height: 0.75rem;
+}
+
+.skeleton-line-title {
+  width: min(100%, 15rem);
+  height: 1.4rem;
+}
+
+.skeleton-line-long {
+  width: 100%;
+}
+
+.skeleton-line-medium {
+  width: 72%;
+}
+
+.skeleton-line-short {
+  width: 48%;
+}
+
+.skeleton-pill {
+  width: 7.5rem;
+  height: 2rem;
+  border-radius: var(--radius-pill);
+}
+
+.skeleton-block {
+  width: 100%;
+  min-height: 1rem;
+  border-radius: 1rem;
+}
+
+.announcement-card.skeleton-card,
+.fixture-card.skeleton-card {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.gallery-card.skeleton-card .skeleton-block {
+  height: clamp(13.5rem, 31vw, 17rem);
+  border-radius: 0;
+}
+
+.video-card.skeleton-card .skeleton-block {
+  aspect-ratio: 16 / 9;
+  border-radius: 1rem;
+}
+
+.video-card.skeleton-card .video-copy-compact {
+  justify-content: flex-start;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line::after,
+  .skeleton-block::after,
+  .skeleton-pill::after {
+    animation: none;
+    transform: none;
+  }
+}
+
 .gallery-card {
   overflow: hidden;
   padding: 0;
